@@ -33,10 +33,6 @@ public class HamonOverdrive extends HamonAction {
         if (GeneralUtil.orElseFalse(power.getTypeSpecificData(ModPowers.HAMON.get()), hamon -> {
             return hamon.isSkillLearned(ModHamonSkills.METAL_SILVER_OVERDRIVE.get());
         })) {
-            LivingEntity user = power.getUser();
-            if (MCUtil.isItemWeapon(user.getMainHandItem())) {
-                return ModHamonActions.JONATHAN_METAL_SILVER_OVERDRIVE_WEAPON.get();
-            }
             if (HamonMetalSilverOverdrive.targetedByMSO(target)) {
                 return ModHamonActions.JONATHAN_METAL_SILVER_OVERDRIVE.get();
             }
@@ -46,7 +42,7 @@ public class HamonOverdrive extends HamonAction {
     
     @Override
     protected void perform(World world, LivingEntity user, INonStandPower power, ActionTarget target) {
-        if (!world.isClientSide() && target.getType() == TargetType.ENTITY) {
+        if (!world.isClientSide() && target.getType() == TargetType.ENTITY && user.swingTime == 0) {
             Entity entity = target.getEntity();
             if (entity instanceof LivingEntity) {
                 LivingEntity targetEntity = (LivingEntity) entity;
