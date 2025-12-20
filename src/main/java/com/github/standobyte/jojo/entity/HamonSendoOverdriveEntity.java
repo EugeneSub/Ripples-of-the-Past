@@ -25,6 +25,7 @@ import com.github.standobyte.jojo.util.mc.damage.DamageUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.IntNBT;
@@ -32,6 +33,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.particles.IParticleData;
 import net.minecraft.util.Direction;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.SoundCategory;
@@ -161,8 +163,6 @@ public class HamonSendoOverdriveEntity extends Entity implements IEntityAddition
             remove();
         }
     }
-    
-
 
     private static class Wave {
         private int tick = 0;
@@ -177,7 +177,8 @@ public class HamonSendoOverdriveEntity extends Entity implements IEntityAddition
                     if (entity.checkHurtAngle(target)
                             && target.getCapability(LivingUtilCapProvider.CAPABILITY).map(
                                     cap -> cap.tryHurtFromSendoOverdrive(entity, WAVE_ADD_TICK)).orElse(true)
-                            && DamageUtil.dealHamonDamage(target, entity.damage, entity, entity.getUser())) {
+                            && DamageUtil.dealHamonDamage(target, entity.damage, entity, entity.getUser(), 
+                            		attack -> attack.hamonParticle(ModParticles.HAMON_SPARK_SILVER.get()))) {
                         entity.givePointsToUser();
                     }
                     hitEntities.add(target);
@@ -329,12 +330,12 @@ public class HamonSendoOverdriveEntity extends Entity implements IEntityAddition
                     break;
                 }
                 particleVec = particleVec.scale(radius / WAVE_TICK_LENGTH);
-                CustomParticlesHelper.addSendoHamonOverdriveParticle(level, ModParticles.HAMON_SPARK.get(), axis, 
+                CustomParticlesHelper.addSendoHamonOverdriveParticle(level, ModParticles.HAMON_SPARK_SILVER.get(), axis, 
                         center.x, center.y, center.z, particleVec.x, particleVec.y, particleVec.z, WAVE_TICK_LENGTH);
             }
         }
     }
-    
+
     public void setBlockTarget(BlockPos targetedBlockPos, Direction targetedFace) {
         this.targetedBlockPos = targetedBlockPos;
         this.targetedFace = targetedFace;

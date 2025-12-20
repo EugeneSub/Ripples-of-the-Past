@@ -26,7 +26,7 @@ public class SatiporojaScarfItem extends CustomModelArmorItem {
         super(material, slot, builder);
     }
 
-    public static final float SCARF_SWING_ENERGY_COST = 600;
+    public static final float SCARF_SWING_ENERGY_COST = 60;
     @Override
     public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
         ItemStack stack = player.getItemInHand(hand);
@@ -60,8 +60,8 @@ public class SatiporojaScarfItem extends CustomModelArmorItem {
         return INonStandPower.getNonStandPowerOptional(user).map(power -> 
         power.getTypeSpecificData(ModPowers.HAMON.get()).map(hamon -> {
             if (!user.level.isClientSide()) {
-                if (power.consumeEnergy(500) && DamageUtil.dealHamonDamage(target, 0.6F, user, null)) {
-                    if (user.isShiftKeyDown() && hamon.isSkillLearned(ModHamonSkills.SNAKE_MUFFLER.get()) && power.consumeEnergy(100)) {
+                if (power.consumeEnergy(50) && DamageUtil.dealHamonDamage(target, 1.0F, user, null) && user.swingTime == 0) {
+                    /*if (user.isShiftKeyDown() && hamon.isSkillLearned(ModHamonSkills.SNAKE_MUFFLER.get()) && power.consumeEnergy(100)) {
                         SatiporojaScarfBindingEntity scarf = new SatiporojaScarfBindingEntity(user.level, user);
                         scarf.attachToEntity(target);
                         target.addEffect(new EffectInstance(ModStatusEffects.STUN.get(), scarf.ticksLifespan()));
@@ -69,8 +69,8 @@ public class SatiporojaScarfItem extends CustomModelArmorItem {
                         if (user instanceof PlayerEntity) {
                             ((PlayerEntity) user).getCooldowns().addCooldown(this, scarf.ticksLifespan());
                         }
-                    }
-                    hamon.hamonPointsFromAction(HamonStat.STRENGTH, 500);
+                    }*/
+                    hamon.hamonPointsFromAction(HamonStat.STRENGTH, 50);
                     return true;
                 }
                 return false;

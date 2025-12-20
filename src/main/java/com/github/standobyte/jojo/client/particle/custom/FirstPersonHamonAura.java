@@ -134,7 +134,7 @@ public class FirstPersonHamonAura {
                     .flatMap(power -> power.getTypeSpecificData(ModPowers.HAMON.get()));
             return hamonOptional.map(hamon -> {
                 Item item = itemStack.getItem();
-                return entity.getMainArm() == handSide && (hamon.isSkillLearned(ModHamonSkills.METAL_SILVER_OVERDRIVE.get()) || OilItem.remainingOiledUses(itemStack).isPresent()) && MCUtil.isItemWeapon(itemStack)
+                return entity.getMainArm() == handSide && OilItem.remainingOiledUses(itemStack).isPresent() && MCUtil.isItemWeapon(itemStack)
                         || hamon.isSkillLearned(ModHamonSkills.PLANT_ITEM_INFUSION.get()) && HamonUtil.isItemLivingMatter(itemStack)
                         || hamon.isSkillLearned(ModHamonSkills.THROWABLES_INFUSION.get()) && (item == Items.EGG || item == Items.SNOWBALL || item == ModItems.MOLOTOV.get() || ((item == Items.SPLASH_POTION || item == Items.LINGERING_POTION) && PotionUtils.getPotion(itemStack) == Potions.WATER))
                         || hamon.isSkillLearned(ModHamonSkills.ARROW_INFUSION.get()) && (item instanceof ShootableItem || item instanceof TridentItem || item == ModItems.KNIFE.get() || item == ModItems.BLADE_HAT.get())

@@ -612,12 +612,12 @@ public class GameplayEventHandler {
             
             INonStandPower.getNonStandPowerOptional(hamonUser).ifPresent(power -> {
                 OilItem.remainingOiledUses(weapon).ifPresent(oilUses -> {
-                    float energyCost = 500F;
-                    if (power.hasPower() && power.getEnergy() >= energyCost) {
+                    float energyCost = 50F;
+                    if (power.hasPower() && hamonUser.swingTime == 0 && power.getEnergy() >= energyCost) {
                         power.getTypeSpecificData(ModPowers.HAMON.get()).ifPresent(hamon -> {
                             power.consumeEnergy(energyCost);
                             DamageUtil.dealHamonDamage(target, 1.5F, hamonUser, null);
-                            hamon.hamonPointsFromAction(HamonStat.STRENGTH, 500);
+                            hamon.hamonPointsFromAction(HamonStat.STRENGTH, 50);
                             
                             OilItem.setWeaponOilUses(weapon, oilUses - 1);
                         });

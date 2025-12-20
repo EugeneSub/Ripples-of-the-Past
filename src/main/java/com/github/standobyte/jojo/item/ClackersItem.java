@@ -153,7 +153,7 @@ public class ClackersItem extends Item {
         power.getTypeSpecificData(ModPowers.HAMON.get()).map(hamon -> {
             if (hamon.isSkillLearned(ModHamonSkills.CLACKER_VOLLEY.get())) {
                 if (!user.level.isClientSide()) {
-                    if (power.consumeEnergy(200) && DamageUtil.dealHamonDamage(target, 0.15F, user, null)) {
+                    if (power.consumeEnergy(20) && DamageUtil.dealHamonDamage(target, 1.25F, user, null) && user.swingTime == 0) {
                         target.invulnerableTime = 0;
                         hamon.hamonPointsFromAction(HamonStat.STRENGTH, 200);
                         return true;

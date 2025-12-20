@@ -68,7 +68,7 @@ public class SatiporojaScarfEntity extends OwnerBoundProjectileEntity {
     
     @Override
     protected boolean hurtTarget(Entity target, LivingEntity owner) {
-        return DamageUtil.dealHamonDamage(target, 0.6F, this, owner);
+        return DamageUtil.dealHamonDamage(target, 1.75F, this, owner);
     }
 
     @Override

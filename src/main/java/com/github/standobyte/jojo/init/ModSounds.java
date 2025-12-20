@@ -135,6 +135,12 @@ public class ModSounds {
     
     public static final RegistryObject<SoundEvent> HAMON_HEALING = register("hamon_healing");
     
+    public static final RegistryObject<SoundEvent> HAMON_EFFECT = register("hamon_effect");
+    
+    public static final RegistryObject<SoundEvent> HAMON_CHANNEL = register("hamon_channel");
+    
+    public static final RegistryObject<SoundEvent> HAMON_OVERDRIVE = register("hamon_overdrive");
+    
     public static final RegistryObject<SoundEvent> HAMON_SYO_CHARGE = register("hamon_syo_charge");
     
     public static final RegistryObject<SoundEvent> HAMON_SYO_PUNCH = register("hamon_syo_punch");

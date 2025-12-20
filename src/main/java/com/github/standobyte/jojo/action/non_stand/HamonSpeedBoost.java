@@ -24,28 +24,28 @@ public class HamonSpeedBoost extends HamonAction {
     
     @Override
     protected void perform(World world, LivingEntity user, INonStandPower power, ActionTarget target) {
-        HamonData hamon = power.getTypeSpecificData(ModPowers.HAMON.get()).get();
-        float hamonEfficiency = hamon.getActionEfficiency(getEnergyCost(power, target), false, getUnlockingSkill());
-        float effectStr = (float) hamon.getHamonControlLevel() / (float) HamonData.MAX_STAT_LEVEL * hamonEfficiency;
-        int speedLvl = MathHelper.floor(1.5F * effectStr);
-        int hasteLvl = MathHelper.floor(1.5F * effectStr);
-        if (hamon.isSkillLearned(ModHamonSkills.AFTERIMAGES.get())) {
-            speedLvl++;
-            hasteLvl++;
-        }
-        if (!world.isClientSide()) {
-            int duration = 20 + MathHelper.floor(180F * effectStr);
-            if (hamonEfficiency == 1 && hamon.isSkillLearned(ModHamonSkills.AFTERIMAGES.get())) {
-                user.getCapability(LivingUtilCapProvider.CAPABILITY).ifPresent(cap -> {
-                    cap.addAfterimages(Math.min((int) (effectStr * 7F / 1.5F), 7), duration);
-                });
-            }
-            if (!user.hasEffect(Effects.MOVEMENT_SPEED)) {
-                hamon.hamonPointsFromAction(HamonStat.CONTROL, getEnergyCost(power, target));
-            }
-            user.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, duration, speedLvl));
-            user.addEffect(new EffectInstance(Effects.DIG_SPEED, duration, hasteLvl));
-        }
-        HamonUtil.emitHamonSparkParticles(world, user instanceof PlayerEntity ? (PlayerEntity) user : null, user.position(), (speedLvl + 1) * 0.25F);
+    	HamonData hamon = power.getTypeSpecificData(ModPowers.HAMON.get()).get();
+	    float hamonEfficiency = hamon.getActionEfficiency(getEnergyCost(power, target), false, getUnlockingSkill());
+	    float effectStr = (float) hamon.getHamonControlLevel() / (float) HamonData.MAX_STAT_LEVEL * hamonEfficiency;
+	    int speedLvl = MathHelper.floor(1.5F * effectStr);
+	    int hasteLvl = MathHelper.floor(1.5F * effectStr);
+	    /*if (hamon.isSkillLearned(ModHamonSkills.AFTERIMAGES.get())) {
+	        speedLvl++;
+	        hasteLvl++;
+	    }*/
+	    if (!world.isClientSide()) {
+	        int duration = 20 + MathHelper.floor(180F * effectStr);
+	        /*if (hamonEfficiency == 1 && hamon.isSkillLearned(ModHamonSkills.AFTERIMAGES.get())) {
+	            user.getCapability(LivingUtilCapProvider.CAPABILITY).ifPresent(cap -> {
+	                cap.addAfterimages(Math.min((int) (effectStr * 7F / 1.5F), 7), duration);
+	            });
+	        }*/
+	        if (!user.hasEffect(Effects.MOVEMENT_SPEED)) {
+	            hamon.hamonPointsFromAction(HamonStat.CONTROL, getEnergyCost(power, target));
+	        }
+	        user.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, duration, speedLvl, false, false));
+	        user.addEffect(new EffectInstance(Effects.DIG_SPEED, duration, hasteLvl, false, false));
+	    }
+	    HamonUtil.emitHamonSparkParticles(world, user instanceof PlayerEntity ? (PlayerEntity) user : null, user.position(), (speedLvl + 1) * 0.25F);	        
     }
 }

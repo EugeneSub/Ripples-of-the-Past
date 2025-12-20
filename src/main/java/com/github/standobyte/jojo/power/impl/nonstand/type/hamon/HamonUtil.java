@@ -190,11 +190,11 @@ public class HamonUtil {
     }
     
     public static final class ProjectileChargeProperties {
-        public static final ProjectileChargeProperties ABSTRACT_ARROW = new ProjectileChargeProperties(1.5F, OptionalInt.of(10), 1000);
-        public static final ProjectileChargeProperties SNOWBALL = new ProjectileChargeProperties(0.75F, OptionalInt.of(20), 500);
-        public static final ProjectileChargeProperties EGG = new ProjectileChargeProperties(0.75F, OptionalInt.empty(), 200);
-        public static final ProjectileChargeProperties WATER_BOTTLE = new ProjectileChargeProperties(1.0F, OptionalInt.of(30), 750);
-        public static final ProjectileChargeProperties MOLOTOV = new ProjectileChargeProperties(1.0F, OptionalInt.of(200), 500);
+        public static final ProjectileChargeProperties ABSTRACT_ARROW = new ProjectileChargeProperties(1.5F, OptionalInt.of(10), 100);
+        public static final ProjectileChargeProperties SNOWBALL = new ProjectileChargeProperties(0.75F, OptionalInt.of(20), 50);
+        public static final ProjectileChargeProperties EGG = new ProjectileChargeProperties(0.75F, OptionalInt.empty(), 20);
+        public static final ProjectileChargeProperties WATER_BOTTLE = new ProjectileChargeProperties(1.0F, OptionalInt.of(30), 75);
+        public static final ProjectileChargeProperties MOLOTOV = new ProjectileChargeProperties(1.0F, OptionalInt.of(200), 50);
         
         private final float baseMultiplier;
         private final OptionalInt chargeTicks;

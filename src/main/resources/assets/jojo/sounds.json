@@ -261,10 +261,22 @@
     "subtitle": "jojo.subtitle.hamon_healing",
 	"sounds": [
 	  {
-	    "name": "jojo:hamon_early_sound",
-	    "volume": 0.2
+	    "name": "jojo:hamon_healing",
+	    "volume": 0.7
 	  }
 	]
+  },
+  "hamon_effect": {
+    "subtitle": "jojo.subtitle.hamon_sparks",
+    "sounds": [ "jojo:hamon_effect" ]
+  },
+  "hamon_channel": {
+    "subtitle": "jojo.subtitle.hamon_concentration",
+    "sounds": [ "jojo:hamon_channel" ]
+  },
+  "hamon_overdrive": {
+    "subtitle": "jojo.subtitle.hamon_syo_charge",
+    "sounds": [ "jojo:hamon_overdrive" ]
   },
   "hamon_syo_charge": {
     "subtitle": "jojo.subtitle.hamon_syo_charge",

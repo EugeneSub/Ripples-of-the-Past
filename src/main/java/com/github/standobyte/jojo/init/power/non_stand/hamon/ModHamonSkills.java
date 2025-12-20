@@ -43,7 +43,7 @@ public class ModHamonSkills {
             () -> new BaseHamonSkill.Builder(HamonStat.STRENGTH, RewardType.ATTACK)
             .unlocks(ModHamonActions.HAMON_TURQUOISE_BLUE_OVERDRIVE)
             .skillBranch(SkillBranch.OVERDRIVE)
-            .requiredSkill(OVERDRIVE)
+            .requiredSkill(SENDO_OVERDRIVE)
             .build());
     
     public static final RegistryObject<BaseHamonSkill> SUNLIGHT_YELLOW_OVERDRIVE = HAMON_SKILLS.register("sunlight_yellow_overdrive", 
@@ -95,14 +95,14 @@ public class ModHamonSkills {
     public static final RegistryObject<BaseHamonSkill> JUMP = HAMON_SKILLS.register("jump", 
             () -> new BaseHamonSkill.Builder(HamonStat.STRENGTH, RewardType.ABILITY)
             .skillBranch(SkillBranch.FLEXIBILITY)
-            .requiredSkill(ZOOM_PUNCH)
+            //.requiredSkill(ZOOM_PUNCH)
             .build());
             
     public static final RegistryObject<BaseHamonSkill> SPEED_BOOST = HAMON_SKILLS.register("speed_boost", 
             () -> new BaseHamonSkill.Builder(HamonStat.STRENGTH, RewardType.ABILITY)
             .unlocks(ModHamonActions.HAMON_SPEED_BOOST)
             .skillBranch(SkillBranch.FLEXIBILITY)
-            .requiredSkill(ZOOM_PUNCH)
+            //.requiredSkill(ZOOM_PUNCH)
             .build());
     
     public static final RegistryObject<BaseHamonSkill> AFTERIMAGES = HAMON_SKILLS.register("afterimages", 
@@ -134,7 +134,8 @@ public class ModHamonSkills {
     public static final RegistryObject<BaseHamonSkill> HEALING_TOUCH = HAMON_SKILLS.register("healing_touch", 
             () -> new BaseHamonSkill.Builder(HamonStat.CONTROL, RewardType.PASSIVE)
             .skillBranch(SkillBranch.HEALING)
-            .requiredSkill(PLANTS_GROWTH).requiredSkill(EXPEL_VENOM)
+            //.requiredSkill(PLANTS_GROWTH).requiredSkill(EXPEL_VENOM)
+            .requiredSkill(HEALING)
             .build());
     
     
@@ -207,19 +208,19 @@ public class ModHamonSkills {
     public static final RegistryObject<CharacterTechniqueHamonSkill> METAL_SILVER_OVERDRIVE = HAMON_SKILLS.register("metal_silver_overdrive",
             () -> new CharacterTechniqueHamonSkill.Builder(RewardType.PASSIVE)
             .unlocks(ModHamonActions.JONATHAN_METAL_SILVER_OVERDRIVE, false).unlocks(ModHamonActions.JONATHAN_METAL_SILVER_OVERDRIVE_WEAPON, false)
-            .requiredSkill(SENDO_OVERDRIVE).requiredSkill(TURQUOISE_BLUE_OVERDRIVE)
+            .requiredSkill(SENDO_OVERDRIVE)
             .build());
     
     public static final RegistryObject<CharacterTechniqueHamonSkill> SCARLET_OVERDRIVE = HAMON_SKILLS.register("scarlet_overdrive",
             () -> new CharacterTechniqueHamonSkill.Builder(RewardType.ATTACK)
             .unlocks(ModHamonActions.JONATHAN_SCARLET_OVERDRIVE)
-            .requiredSkill(SUNLIGHT_YELLOW_OVERDRIVE)
+            //.requiredSkill(SUNLIGHT_YELLOW_OVERDRIVE)
             .build());
     
     public static final RegistryObject<CharacterTechniqueHamonSkill> OVERDRIVE_BARRAGE = HAMON_SKILLS.register("overdrive_barrage",
             () -> new CharacterTechniqueHamonSkill.Builder(RewardType.ATTACK)
             .unlocks(ModHamonActions.JONATHAN_OVERDRIVE_BARRAGE)
-            .requiredSkill(ZOOM_PUNCH)
+            .requiredSkill(SPEED_BOOST)
             .build());
     
     public static final RegistryObject<CharacterTechniqueHamonSkill> SUNLIGHT_YELLOW_OVERDRIVE_BARRAGE = HAMON_SKILLS.register("syo_barrage",

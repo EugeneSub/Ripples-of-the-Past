@@ -94,7 +94,7 @@ public class HamonSunlightYellowOverdrive extends HamonAction implements IPlayer
     public void startedHolding(World world, LivingEntity user, INonStandPower power, ActionTarget target, boolean requirementsFulfilled) {
         playerSpentEnergy.removeFloat(user.getUUID());
         if (requirementsFulfilled && world.isClientSide()) {
-            ClientTickingSoundsHelper.playStoppableEntitySound(user, ModSounds.HAMON_SYO_CHARGE.get(), 
+            ClientTickingSoundsHelper.playStoppableEntitySound(user, ModSounds.HAMON_OVERDRIVE.get(), 
                     1.0F, 1.0F, false, entity -> power.getHeldAction() == this);
         }
     }

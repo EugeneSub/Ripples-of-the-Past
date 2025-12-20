@@ -134,6 +134,7 @@ public class HamonData extends TypeSpecificData {
     private int hamonControlLevel;
     private float hamonDamageFactor = 1F;
     private float pointsIncFrac = 0;
+    private boolean isHighEnergy = false;
     
     private float breathingTrainingLevel;
     private float breathingTrainingDayBonus;
@@ -216,12 +217,19 @@ public class HamonData extends TypeSpecificData {
         waterWalkingThisTick = false;
     }
     
-    public static final float ENERGY_TICK_DOWN_AMOUNT = 20;
+    public static final float ENERGY_TICK_DOWN_AMOUNT = 0.50F;
     public float tickEnergy() {
         LivingEntity user = power.getUser();
         if (JojoModUtil.isDyingBody(user)) {
             return 0;
         }
+        
+        if(power.getEnergy() > 0.7 * power.getMaxEnergy() && getBreathStability() == getMaxBreathStability() ) {
+        	isHighEnergy = true;
+    	} else {
+    		isHighEnergy = false;
+    	}
+        
         if (power.getHeldAction() == ModHamonActions.HAMON_BREATH.get() && user.getAirSupply() >= user.getMaxAirSupply()) {
             return power.getEnergy() + tickHamonBreath(ModHamonActions.HAMON_BREATH.get());
         }
@@ -249,6 +257,7 @@ public class HamonData extends TypeSpecificData {
                 return power.getEnergy();
             }
         }
+        
     }
     
     public float tickHamonBreath(Action<?> hamonBreathAction) {
@@ -382,7 +391,7 @@ public class HamonData extends TypeSpecificData {
     }
     
     private float fullEnergyTicks() {
-        float ticks = 80F - (40F * breathingTrainingLevel / MAX_BREATHING_LEVEL);
+        float ticks = 800F - (400F * breathingTrainingLevel / MAX_BREATHING_LEVEL);
         if (meditationCompleted) {
             ticks -= MEDITATION_COMPLETED_ENERGY_REGEN_TIME_REDUCTION;
         }
@@ -430,7 +439,10 @@ public class HamonData extends TypeSpecificData {
         float efficiency = getHamonEnergyUsageEfficiency(energyCost, false) * getBloodstreamEfficiency();
         
         if (efficiency > 0) {
-            float multiplier = 1;
+        	float multiplier = 1;
+            if(isHighEnergy) {
+            	multiplier = 1.25F;
+            }
             if (exercisesCompleted >= MAX_EXERCISES_NEEDED) {
                 multiplier += ALL_EXERCISES_EFFICIENCY_ADD_MULTIPLIER;
             }
@@ -481,7 +493,7 @@ public class HamonData extends TypeSpecificData {
     
     
     private static final float NO_ENERGY_EFFICIENCY = 0.5f;
-    private static final float ENERGY_STABILITY_USAGE_RATIO = 2.5F;
+    private static final float ENERGY_STABILITY_USAGE_RATIO = 0.15F;
     float getHamonEnergyUsageEfficiency(float energyNeeded, boolean doConsume) {
         LivingEntity user = power.getUser();
         doConsume &= !user.level.isClientSide() && !power.isUserCreative();
@@ -798,15 +810,15 @@ public class HamonData extends TypeSpecificData {
             giveBreathingTrainingBuffs(user);
         }
     }
-    
+    // 0.03 0.015 0.0005 0.01
     private static final AttributeModifier ATTACK_DAMAGE = new AttributeModifier(
-            UUID.fromString("8dcb2ad7-6067-4615-b7b6-af5256537c10"), "Attack damage from Hamon Training", 0.03, AttributeModifier.Operation.ADDITION);
+            UUID.fromString("8dcb2ad7-6067-4615-b7b6-af5256537c10"), "Attack damage from Hamon Training", 0.02, AttributeModifier.Operation.ADDITION);
     private static final AttributeModifier ATTACK_SPEED = new AttributeModifier(
-            UUID.fromString("995b2915-9053-472c-834c-f94251e81659"), "Attack speed from Hamon Training", 0.015, AttributeModifier.Operation.ADDITION);
+            UUID.fromString("995b2915-9053-472c-834c-f94251e81659"), "Attack speed from Hamon Training", 0.010, AttributeModifier.Operation.ADDITION);
     private static final AttributeModifier MOVEMENT_SPEED = new AttributeModifier(
-            UUID.fromString("ffa9ba4e-3811-44f7-a4a9-887ffbd47390"), "Movement speed from Hamon Training", 0.0005, AttributeModifier.Operation.ADDITION);
+            UUID.fromString("ffa9ba4e-3811-44f7-a4a9-887ffbd47390"), "Movement speed from Hamon Training", 0.0003, AttributeModifier.Operation.ADDITION);
     private static final AttributeModifier SWIMMING_SPEED = new AttributeModifier(
-            UUID.fromString("34dcb563-6759-4a2b-9dd8-ad2dd7e70404"), "Swimming speed from Hamon Training", 0.01, AttributeModifier.Operation.ADDITION);
+            UUID.fromString("34dcb563-6759-4a2b-9dd8-ad2dd7e70404"), "Swimming speed from Hamon Training", 0.005, AttributeModifier.Operation.ADDITION);
     
     private void giveBreathingTrainingBuffs(LivingEntity entity) {
         setBreathingTrainingAttributes(entity, (int) getBreathingLevel());
@@ -828,7 +840,7 @@ public class HamonData extends TypeSpecificData {
     public static final AttributeModifier MINING_COMPLETED = new AttributeModifier(
             UUID.fromString("8674ea35-6eaf-4e22-98da-4ec0c5a4d20d"), "Attack speed from running exercise", 0.05D, AttributeModifier.Operation.MULTIPLY_BASE);
     public static final float SWIMMING_COMPLETED_MAX_ENERGY_MULTIPLIER = 1.1F;
-    public static final float MEDITATION_COMPLETED_ENERGY_REGEN_TIME_REDUCTION = 20;
+    public static final float MEDITATION_COMPLETED_ENERGY_REGEN_TIME_REDUCTION = 100; //20
     private boolean swimmingCompleted = false;
     private boolean meditationCompleted = false;
     private int exercisesCompleted = 0;
@@ -1409,18 +1421,20 @@ public class HamonData extends TypeSpecificData {
                 }
                 energy *= 2;
             }
-            float particlesPerTick = energy / getMaxBreathStability() * getHamonDamageMultiplier();
-            boolean isUserTheCameraEntity = user == ClientUtil.getCameraEntity();
-            IParticleData particleType = PARTICLE_TYPE.get(auraColor).get();
-            
-            GeneralUtil.doFractionTimes(() -> {
-                CustomParticlesHelper.createHamonAuraParticle(particleType, user, 
-                        user.getX() + (random.nextDouble() - 0.5) * (user.getBbWidth() + 0.5F), 
-                        user.getY() + random.nextDouble() * (user.getBbHeight() * 0.5F), 
-                        user.getZ() + (random.nextDouble() - 0.5) * (user.getBbWidth() + 0.5F));
-            }, particlesPerTick);
-            if (isUserTheCameraEntity) {
-                CustomParticlesHelper.summonHamonAuraParticlesFirstPerson(particleType, user, particlesPerTick / 5);
+            if(energy > 0.70 * power.getMaxEnergy() && getBreathStability() == getMaxBreathStability()) {
+	            float particlesPerTick = energy / getMaxBreathStability() * getHamonDamageMultiplier();
+	            boolean isUserTheCameraEntity = user == ClientUtil.getCameraEntity();
+	            IParticleData particleType = PARTICLE_TYPE.get(auraColor).get();
+	            
+	            GeneralUtil.doFractionTimes(() -> {
+	                CustomParticlesHelper.createHamonAuraParticle(particleType, user, 
+	                        user.getX() + (random.nextDouble() - 0.5) * (user.getBbWidth() + 0.5F), 
+	                        user.getY() + random.nextDouble() * (user.getBbHeight() * 0.5F), 
+	                        user.getZ() + (random.nextDouble() - 0.5) * (user.getBbWidth() + 0.5F));
+	            }, particlesPerTick);
+	            if (isUserTheCameraEntity) {
+	                CustomParticlesHelper.summonHamonAuraParticlesFirstPerson(particleType, user, particlesPerTick / 5);
+	            }
             }
         }
     }
@@ -1451,15 +1465,14 @@ public class HamonData extends TypeSpecificData {
             if (lastUsedAction == ModHamonActions.JONATHAN_SCARLET_OVERDRIVE.get()) {
                 return HamonAuraColor.RED;
             }
-            if (lastUsedAction == ModHamonActions.JONATHAN_METAL_SILVER_OVERDRIVE.get()
-                    || lastUsedAction == ModHamonActions.JONATHAN_METAL_SILVER_OVERDRIVE_WEAPON.get()) {
+            if (lastUsedAction == ModHamonActions.JONATHAN_METAL_SILVER_OVERDRIVE.get()) {
                 return HamonAuraColor.SILVER;
             }
         }
         
-        if (isSkillLearned(ModHamonSkills.METAL_SILVER_OVERDRIVE.get()) && MCUtil.isItemWeapon(user.getMainHandItem())) {
+        /*if (isSkillLearned(ModHamonSkills.METAL_SILVER_OVERDRIVE.get()) && MCUtil.isItemWeapon(user.getMainHandItem())) {
             return HamonAuraColor.SILVER;
-        }
+        }*/
         
         if (isSkillLearned(ModHamonSkills.TURQUOISE_BLUE_OVERDRIVE.get()) && user.isUnderWater()) {
             return HamonAuraColor.BLUE;
@@ -1698,7 +1711,7 @@ public class HamonData extends TypeSpecificData {
     }
     
     public float waterWalkingTickCost() {
-        return waterWalkingPrevTick ? 1 : 50;
+        return waterWalkingPrevTick ? 0.1F : 5;
     }
     
 }

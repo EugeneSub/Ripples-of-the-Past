@@ -10,6 +10,7 @@ import com.github.standobyte.jojo.action.non_stand.HamonAction;
 import com.github.standobyte.jojo.client.ClientUtil;
 import com.github.standobyte.jojo.client.controls.ControlScheme;
 import com.github.standobyte.jojo.entity.stand.StandEntity;
+import com.github.standobyte.jojo.init.ModStatusEffects;
 import com.github.standobyte.jojo.init.power.non_stand.ModPowers;
 import com.github.standobyte.jojo.init.power.non_stand.hamon.ModHamonSkills;
 import com.github.standobyte.jojo.network.PacketManager;
@@ -21,15 +22,18 @@ import com.github.standobyte.jojo.power.impl.nonstand.type.hamon.skill.BaseHamon
 import com.github.standobyte.jojo.power.impl.nonstand.type.hamon.skill.CharacterHamonTechnique;
 import com.github.standobyte.jojo.power.impl.nonstand.type.hamon.skill.CharacterTechniqueHamonSkill;
 import com.github.standobyte.jojo.power.impl.stand.IStandPower;
+import com.github.standobyte.jojo.util.mc.damage.DamageUtil;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.FishingRodItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.EffectInstance;
@@ -141,18 +145,17 @@ public class HamonPowerType extends NonStandPowerType<HamonData> {
     
     @Override
     public float getLeapStrength(INonStandPower power) {
-        HamonData hamon = power.getTypeSpecificData(this).get();
-        return hamon.isSkillLearned(ModHamonSkills.AFTERIMAGES.get()) ? 1.5F : 1.4F;
+        return 1.4F;
     }
     
     @Override
     public int getLeapCooldownPeriod() {
-        return 20;
+        return 60;
     }
     
     @Override
     public float getLeapEnergyCost() {
-        return 250;
+        return 50;
     }
     
     @Override
@@ -199,22 +202,32 @@ public class HamonPowerType extends NonStandPowerType<HamonData> {
                             }
                         }
                     }
-//                    if (player.fishing != null) {
-//                        ItemStack mainHandItem = player.getMainHandItem();
-//                        if (mainHandItem.getItem() instanceof FishingRodItem) {
-//                            Entity hooked = player.fishing.getHookedIn();
-//                            if (hooked != null) {
-//                                float energyCost = 30;
-//                                if (power.consumeEnergy(energyCost)) {
-//                                    ModDamageSources.dealHamonDamage(hooked, 0.0125F, player.fishing, player);
-//                                    hamon.hamonPointsFromAction(HamonStat.STRENGTH, energyCost);
-//                                }
-//                                else {
-//                                    player.fishing.retrieve(mainHandItem);
-//                                }
-//                            }
-//                        }
-//                    }
+                    if (player.fishing != null) {
+                        ItemStack mainHandItem = player.getMainHandItem();
+                        if (mainHandItem.getItem() instanceof FishingRodItem) {
+                            Entity hooked = player.fishing.getHookedIn();
+                            LivingEntity hookedMob = (LivingEntity) hooked;
+                            if (hooked != null) {
+                                float energyCost = 30;
+                                if (power.consumeEnergy(energyCost)) {
+                                    DamageUtil.dealHamonDamage(hooked, 1.25F, player.fishing, player);
+                                    hamon.hamonPointsFromAction(HamonStat.STRENGTH, energyCost);
+                                    player.fishing.retrieve(mainHandItem);
+                                    if(player.isShiftKeyDown() 
+                                    		&& power.getTypeSpecificData(ModPowers.HAMON.get()).get().isSkillLearned(ModHamonSkills.HAMON_SHOCK.get())
+                                    		&& HamonUtil.isLiving(hookedMob)) {
+                                    	hookedMob.addEffect(new EffectInstance(ModStatusEffects.HAMON_SHOCK.get(), 60, 0, false, false, true));
+                                    	player.getCooldowns().addCooldown(mainHandItem.getItem(), 100);
+                                    } else {
+                                    	player.getCooldowns().addCooldown(mainHandItem.getItem(), 10);
+                                    }
+                                }
+                                else {
+                                    player.fishing.retrieve(mainHandItem);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

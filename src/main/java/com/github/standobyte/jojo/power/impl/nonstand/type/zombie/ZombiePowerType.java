@@ -148,7 +148,7 @@ public class ZombiePowerType extends NonStandPowerType<ZombieData> {
     
     @Override
     public int getLeapCooldownPeriod() {
-        return 20;
+        return 60;
     }
     
     @Override

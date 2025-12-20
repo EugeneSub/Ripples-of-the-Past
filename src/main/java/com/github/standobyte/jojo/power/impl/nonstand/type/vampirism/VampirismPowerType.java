@@ -201,7 +201,7 @@ public class VampirismPowerType extends NonStandPowerType<VampirismData> {
     
     @Override
     public int getLeapCooldownPeriod() {
-        return 20;
+        return 60;
     }
     
     @Override

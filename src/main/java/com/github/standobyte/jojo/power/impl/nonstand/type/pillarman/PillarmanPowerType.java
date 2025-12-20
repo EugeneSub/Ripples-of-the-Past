@@ -138,7 +138,7 @@ public class PillarmanPowerType extends NonStandPowerType<PillarmanData> {
     
     @Override
     public int getLeapCooldownPeriod() {
-        return 20;
+        return 60;
     }
     
     @Override
