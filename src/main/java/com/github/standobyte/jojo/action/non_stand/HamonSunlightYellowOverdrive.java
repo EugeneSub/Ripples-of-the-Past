@@ -8,6 +8,7 @@ import com.github.standobyte.jojo.action.player.ContinuousActionInstance;
 import com.github.standobyte.jojo.action.player.IPlayerAction;
 import com.github.standobyte.jojo.capability.entity.PlayerUtilCap;
 import com.github.standobyte.jojo.client.ClientUtil;
+import com.github.standobyte.jojo.client.particle.custom.CustomParticlesHelper;
 import com.github.standobyte.jojo.client.playeranim.anim.ModPlayerAnimations;
 import com.github.standobyte.jojo.client.playeranim.anim.interfaces.WindupAttackAnim;
 import com.github.standobyte.jojo.client.sound.ClientTickingSoundsHelper;
@@ -59,10 +60,10 @@ public class HamonSunlightYellowOverdrive extends HamonAction implements IPlayer
     }
     
     
-    private Object2FloatMap<UUID> playerSpentEnergy = new Object2FloatArrayMap<>();
+    protected Object2FloatMap<UUID> playerSpentEnergy = new Object2FloatArrayMap<>();
     @Override
     public float getHeldTickEnergyCost(INonStandPower power) {
-        return Math.min(getActualMaxEnergy(power) / Math.max(getMaxPowerTicks(power), 1), power.getEnergy());
+        return Math.min(getActualMaxEnergy(power) / Math.max(getMaxPowerTicks(power), 1) * 0.02F, power.getEnergy());
     }
     
     protected static float getActualMaxEnergy(INonStandPower power) {
@@ -71,7 +72,7 @@ public class HamonSunlightYellowOverdrive extends HamonAction implements IPlayer
     
     @Override
     public void onHoldTick(World world, LivingEntity user, INonStandPower power, int ticksHeld, ActionTarget target, boolean requirementsFulfilled) {
-        float spentEnergy = power.getEnergy();
+        float spentEnergy = power.getEnergy() * 50F;
         super.onHoldTick(world, user, power, ticksHeld, target, requirementsFulfilled);
         if (power.isUserCreative()) {
             spentEnergy = getHeldTickEnergyCost(power);
@@ -125,10 +126,10 @@ public class HamonSunlightYellowOverdrive extends HamonAction implements IPlayer
     public void stoppedHolding(World world, LivingEntity user, INonStandPower power, int ticksHeld, boolean willFire) {
         if (!willFire) {
             if (!world.isClientSide()) {
-                if (!power.isUserCreative()) {
+            	/*if (!power.isUserCreative()) {
                     float energySpent = getSpentEnergy(power);
                     power.setEnergy(Math.min(power.getMaxEnergy(), power.getEnergy() + energySpent));
-                }
+                }*/
             }
             else if (user instanceof PlayerEntity) {
                 getPlayerAnim().stopAnim((PlayerEntity) user);
@@ -168,6 +169,7 @@ public class HamonSunlightYellowOverdrive extends HamonAction implements IPlayer
                     ActionTarget target = playerPower.getMouseTarget();
                     if (target.getEntity() instanceof LivingEntity) {
                         performPunch((LivingEntity) target.getEntity());
+                        playerPower.consumeEnergy(300F);
                     }
                 }
                 break;

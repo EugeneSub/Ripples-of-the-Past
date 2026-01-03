@@ -76,8 +76,28 @@ public class EnergyRippleLayer<T extends LivingEntity, M extends BipedModel<T>> 
             // hand sparks (wall climbing, hamon shock)
             ParticleType<?> particle = null;
             if (LivingWallClimbing.getHandler(entity).map(LivingWallClimbing::isHamon).orElse(false)
-                    || curPlayerAction.map(action -> action.getAction() == ModHamonActions.HAMON_SHOCK.get()).orElse(false)) {
+                    || curPlayerAction.map(action -> action.getAction() == ModHamonActions.HAMON_SHOCK.get()).orElse(false)
+                    || curPlayerAction.map(action -> action.getAction() == ModHamonActions.HAMON_CONFUSION.get()).orElse(false)
+                    || curPlayerAction.map(action -> action.getAction() == ModHamonActions.HAMON_BEAT.get()).orElse(false)
+                    || INonStandPower.getNonStandPowerOptional(entity).map(power -> power.getHeldAction(true) == ModHamonActions.HAMON_HEALING.get()).orElse(false)) {
                 particle = ModParticles.HAMON_SPARK.get();
+            }
+            if (INonStandPower.getNonStandPowerOptional(entity).map(power -> power.getHeldAction(true) == ModHamonActions.HAMON_SUNLIGHT_YELLOW_OVERDRIVE.get()).orElse(false)) {
+                particle = ModParticles.HAMON_SPARK_YELLOW.get();
+                particles = MathUtil.fractionRandomInc((handSparkIntensity * 2) * timeDelta);
+                controlLevel = 0.15F;
+            }
+            if (INonStandPower.getNonStandPowerOptional(entity).map(power -> power.getHeldAction(true) == ModHamonActions.JONATHAN_SCARLET_OVERDRIVE.get()).orElse(false)) {
+                particle = ModParticles.HAMON_SPARK_RED.get();
+                controlLevel = 0.35F;
+            }
+            if (INonStandPower.getNonStandPowerOptional(entity).map(power -> power.getHeldAction(true) == ModHamonActions.HAMON_TURQUOISE_BLUE_OVERDRIVE.get()).orElse(false)) {
+                particle = ModParticles.HAMON_SPARK_BLUE.get();
+                controlLevel = 0.35F;
+            }
+            if (INonStandPower.getNonStandPowerOptional(entity).map(power -> power.getHeldAction(true) == ModHamonActions.HAMON_SENDO_OVERDRIVE.get()).orElse(false)) {
+                particle = ModParticles.HAMON_SPARK.get();
+                controlLevel = 0.35F;
             }
             if (particle != null) {
                 for (HandSide hand : HandSide.values()) {
@@ -112,11 +132,13 @@ public class EnergyRippleLayer<T extends LivingEntity, M extends BipedModel<T>> 
             
             // knee sparks (sendo wave kick)
             if (GeneralUtil.orElseFalse(ContinuousActionInstance.getCurrentAction(entity), 
-                    action -> action.getAction() == ModHamonActions.ZEPPELI_SENDO_WAVE_KICK.get())) {
+                    action -> action.getAction() == ModHamonActions.ZEPPELI_SENDO_WAVE_KICK.get())
+            		|| GeneralUtil.orElseFalse(ContinuousActionInstance.getCurrentAction(entity), 
+                            action -> action.getAction() == ModHamonActions.LISALISA_SNAKE_MUFFLER.get())) {
                 for (int i = 0; i < particles; i++) {
                     Vector3d offset = new Vector3d(
                             (RANDOM.nextDouble() - 0.5) * 0.4,
-                            (RANDOM.nextDouble() - 0.5) * (0.3 - 0.2 * controlLevel) - 0.375,
+                            (RANDOM.nextDouble() - 0.5) * (0.3 - 0.2 * (controlLevel * 0.5)) - 0.375,
                             (RANDOM.nextDouble()) * 0.2);
                     sparks.addSpark(SparkPseudoParticle.legSpark(model, true, ModParticles.HAMON_SPARK.get(), offset));
                 }

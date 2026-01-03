@@ -37,7 +37,7 @@ public class SnakeMufflerEntity extends OwnerBoundProjectileEntity {
         if (owner == null || !owner.isAlive()) {
             return;
         }
-        if (tickCount < 5) {
+        /*if (tickCount < 5) {
             Vector3d jumpVec = new Vector3d(0, 0.45, 0);
             if (entityToJumpOver != null && entityToJumpOver.isAlive()) {
                 Vector3d posDiff = entityToJumpOver.position().subtract(owner.position());
@@ -51,7 +51,7 @@ public class SnakeMufflerEntity extends OwnerBoundProjectileEntity {
                 }
             }
             owner.setDeltaMovement(jumpVec);
-        }
+        }*/
         owner.fallDistance = 0;
     }
 

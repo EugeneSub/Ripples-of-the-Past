@@ -9,6 +9,7 @@ import com.github.standobyte.jojo.capability.entity.PlayerUtilCap;
 import com.github.standobyte.jojo.client.playeranim.anim.ModPlayerAnimations;
 import com.github.standobyte.jojo.client.sound.HamonSparksLoopSound;
 import com.github.standobyte.jojo.init.ModEntityTypes;
+import com.github.standobyte.jojo.init.ModSounds;
 import com.github.standobyte.jojo.init.ModStatusEffects;
 import com.github.standobyte.jojo.init.power.non_stand.ModPowers;
 import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
@@ -68,6 +69,7 @@ public class HamonShock extends HamonAction implements IPlayerAction<HamonShock.
     protected void perform(World world, LivingEntity user, INonStandPower power, ActionTarget target) {
         if (!world.isClientSide()) {
             setPlayerAction(user, power);
+            world.playSound(null, user.getX(), user.getEyeY(), user.getZ(), ModSounds.HAMON_EFFECT.get(), user.getSoundSource(), 1F, 1F);
         }
     }
     
@@ -130,7 +132,7 @@ public class HamonShock extends HamonAction implements IPlayerAction<HamonShock.
                         int duration = (int) (20 + (80 * controlLvl + 60 * energyRatio) * efficiency);
                         int amplifier = (int) (strengthLvl * 0.05F * efficiency);
                         hamon.hamonPointsFromAction(HamonStat.CONTROL, playerPower.getEnergy() * efficiency);
-                        playerPower.setEnergy(0);
+                        playerPower.consumeEnergy(300F);
                         shockedTarget = targetEntity;
                         targetEntity.addEffect(new EffectInstance(
                                 ModStatusEffects.HAMON_SHOCK.get(), duration, amplifier, false, false, true));
@@ -151,7 +153,7 @@ public class HamonShock extends HamonAction implements IPlayerAction<HamonShock.
         
         @Override
         public float getWalkSpeed() {
-            return 0.25f;
+            return 0.1f;
         }
         
         @Override

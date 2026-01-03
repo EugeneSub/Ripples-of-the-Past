@@ -1,5 +1,10 @@
 package com.github.standobyte.jojo.entity.damaging.projectile;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
 import javax.annotation.Nullable;
 
 import com.github.standobyte.jojo.action.ActionTarget.TargetType;
@@ -10,6 +15,7 @@ import com.github.standobyte.jojo.init.ModSounds;
 import com.github.standobyte.jojo.init.power.non_stand.ModPowers;
 import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
 import com.github.standobyte.jojo.power.impl.nonstand.type.hamon.skill.BaseHamonSkill.HamonStat;
+import com.github.standobyte.jojo.util.general.MathUtil;
 import com.github.standobyte.jojo.util.mc.damage.DamageUtil;
 
 import net.minecraft.block.BlockState;
@@ -27,7 +33,7 @@ import net.minecraft.util.Direction.Axis;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
@@ -44,7 +50,7 @@ public class HamonSendoOverdriveEntity2 extends ModdedProjectileEntity {
     private boolean isVertical = false;
     private boolean isGoingUp = false;
     private boolean isGoingDown = false;
-    
+    private Set<UUID> damagedEntities = new HashSet<>();
     
 
     public HamonSendoOverdriveEntity2(World world, LivingEntity entity) {
@@ -60,10 +66,10 @@ public class HamonSendoOverdriveEntity2 extends ModdedProjectileEntity {
         return this;
     }
     
-    public HamonSendoOverdriveEntity2 setDamage(float damage) {
+    /*public HamonSendoOverdriveEntity2 setDamage(float damage) {
         this.damage = damage;
         return this;
-    }
+    }*/
     
     public HamonSendoOverdriveEntity2 setPoints(float points) {
         this.points = points;
@@ -83,6 +89,15 @@ public class HamonSendoOverdriveEntity2 extends ModdedProjectileEntity {
     public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
         setPos(getX(), getY() - radius, getZ());
         super.shoot(x, y, z, velocity, inaccuracy);
+    }
+    
+    public static AxisAlignedBB hitBox(HamonSendoOverdriveEntity2 charge) {
+        float xzAngle = -charge.yRot * MathUtil.DEG_TO_RAD;
+        Vector3d lookVec = new Vector3d(Math.sin(xzAngle), 0, Math.cos(xzAngle));
+        Vector3d hitboxXZCenter = charge.position().add(lookVec.scale(charge.getBbWidth() * 0.75F));
+        return new AxisAlignedBB(hitboxXZCenter, hitboxXZCenter)
+                .inflate(charge.getBbWidth(), 0.125, charge.getBbWidth())
+                .expandTowards(0, charge.getBbHeight() / 2, 0);
     }
     
     @Override
@@ -108,6 +123,28 @@ public class HamonSendoOverdriveEntity2 extends ModdedProjectileEntity {
             }
             level.playSound(ClientUtil.getClientPlayer(), center.x, center.y, center.z, ModSounds.HAMON_SPARK.get(), 
                     SoundCategory.AMBIENT, Math.min(0.1F + radius * 0.15F, 0.75F), 1.0F + (random.nextFloat() - 0.5F) * 0.15F);
+        } else {
+        	List<LivingEntity> targets = this.level.getEntitiesOfClass(LivingEntity.class, hitBox(this), 
+                    entity -> !entity.is(this) && !entity.is(this.getOwner()));
+            for (LivingEntity target : targets) {
+                if (damagedEntities.add(target.getUUID())) {
+                    boolean hamonDamage = DamageUtil.dealHamonDamage(target, 2.0F, this.getOwner(), null);
+                    if (hamonDamage) {
+                        Vector3d vecToTarget = target.position().subtract(this.position());
+                        float knockbackYRot = (60F * 30F);
+                        knockbackYRot += (float) -MathHelper.atan2(vecToTarget.x, vecToTarget.z) * MathUtil.RAD_TO_DEG;
+                        DamageUtil.knockback((LivingEntity) target, 0.35F, knockbackYRot);
+                    }
+                }
+            }
+            if (!gaveHamonPoints) {
+                INonStandPower.getNonStandPowerOptional(getOwner()).ifPresent(power -> {
+                    power.getTypeSpecificData(ModPowers.HAMON.get()).ifPresent(hamon -> {
+                        gaveHamonPoints = true;
+                        hamon.hamonPointsFromAction(HamonStat.STRENGTH, points);
+                    });
+                });
+            }
         }
         if(level.isEmptyBlock(this.blockPosition().offset(0, 0, 0))
         		&& level.isEmptyBlock(this.blockPosition().offset(0, 1, 0))
@@ -152,7 +189,7 @@ public class HamonSendoOverdriveEntity2 extends ModdedProjectileEntity {
 
 
     
-    @Override
+    /*@Override
     protected boolean hurtTarget(Entity target, LivingEntity owner) {
         return DamageUtil.dealHamonDamage(target, getDamageAmount(), 
                 this, owner, attack -> attack.hamonParticle(ModParticles.HAMON_SPARK.get()));
@@ -174,7 +211,7 @@ public class HamonSendoOverdriveEntity2 extends ModdedProjectileEntity {
                 });
             }
         }
-    }
+    }*/
     
     @Override
     protected void onHitBlock(BlockRayTraceResult result) {

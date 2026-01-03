@@ -13,7 +13,6 @@ import com.github.standobyte.jojo.client.particle.custom.CustomParticlesHelper;
 import com.github.standobyte.jojo.client.sound.ClientTickingSoundsHelper;
 import com.github.standobyte.jojo.entity.HamonSendoOverdriveEntity;
 import com.github.standobyte.jojo.entity.damaging.projectile.HamonSendoOverdriveEntity2;
-import com.github.standobyte.jojo.entity.damaging.projectile.HamonTurquoiseBlueOverdriveEntity;
 import com.github.standobyte.jojo.init.ModParticles;
 import com.github.standobyte.jojo.init.ModSounds;
 import com.github.standobyte.jojo.init.power.non_stand.ModPowers;
@@ -21,7 +20,6 @@ import com.github.standobyte.jojo.init.power.non_stand.hamon.ModHamonActions;
 import com.github.standobyte.jojo.init.power.non_stand.hamon.ModHamonSkills;
 import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
 import com.github.standobyte.jojo.power.impl.nonstand.type.hamon.HamonData;
-import com.github.standobyte.jojo.power.impl.nonstand.type.hamon.HamonPowerType;
 import com.github.standobyte.jojo.power.impl.nonstand.type.hamon.skill.BaseHamonSkill.HamonStat;
 import com.github.standobyte.jojo.util.general.GeneralUtil;
 import com.github.standobyte.jojo.util.general.LazySupplier;
@@ -33,7 +31,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MoverType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.Hand;
@@ -124,6 +121,9 @@ public class HamonSendoOverdrive extends HamonAction {
 	        		|| blockState.is(Blocks.IRON_DOOR)
 	        		|| blockState.is(Blocks.IRON_TRAPDOOR)
 	        		|| blockState.is(Blocks.GOLD_BLOCK)
+	        		|| blockState.is(Blocks.CHAIN)
+            		|| blockState.is(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE)
+	        		|| blockState.is(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE)
 	        		|| blockState.is(Blocks.NETHERITE_BLOCK))) {
 	        	return silverTex.get();
 	        }
@@ -181,6 +181,8 @@ public class HamonSendoOverdrive extends HamonAction {
                 		|| blockState.is(Blocks.IRON_TRAPDOOR)
                 		|| blockState.is(Blocks.GOLD_BLOCK)
                 		|| blockState.is(Blocks.CHAIN)
+                		|| blockState.is(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE)
+                		|| blockState.is(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE)
                 		|| blockState.is(Blocks.NETHERITE_BLOCK)) && hamon.isSkillLearned(ModHamonSkills.METAL_SILVER_OVERDRIVE.get())) {
                 	
                 	HamonSendoOverdriveEntity sendoOverdrive = new HamonSendoOverdriveEntity(world, user, face.getAxis());
@@ -200,7 +202,7 @@ public class HamonSendoOverdrive extends HamonAction {
                 else {
 	                HamonSendoOverdriveEntity2 overdriveWave = new HamonSendoOverdriveEntity2(world, user)
 	                        .setRadius(0.6F + (float) (0.5F * hamonControl * hamonEfficiency))
-	                        .setDamage(2F * hamonEfficiency)
+	                        //.setDamage(2F * hamonEfficiency)
 	                        .setPoints(Math.min(energyCost, power.getEnergy()) * hamonEfficiency)
 	                        .setDuration(30 + (int) (20 * hamonControl));
 	                overdriveWave.shootFromRotation(user, 0.5F, 0);

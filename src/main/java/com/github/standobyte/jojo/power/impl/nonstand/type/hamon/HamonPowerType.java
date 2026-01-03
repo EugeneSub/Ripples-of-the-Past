@@ -29,6 +29,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -202,22 +203,27 @@ public class HamonPowerType extends NonStandPowerType<HamonData> {
                             }
                         }
                     }
-                    if (player.fishing != null) {
+                    if (player.fishing != null && !(player.fishing.getHookedIn() instanceof ItemEntity)) {
                         ItemStack mainHandItem = player.getMainHandItem();
                         if (mainHandItem.getItem() instanceof FishingRodItem) {
                             Entity hooked = player.fishing.getHookedIn();
                             LivingEntity hookedMob = (LivingEntity) hooked;
+                            boolean isShift = false;
+                            if (player.isShiftKeyDown()) {
+                        		isShift = true;
+                        	}
                             if (hooked != null) {
                                 float energyCost = 30;
                                 if (power.consumeEnergy(energyCost)) {
                                     DamageUtil.dealHamonDamage(hooked, 1.25F, player.fishing, player);
                                     hamon.hamonPointsFromAction(HamonStat.STRENGTH, energyCost);
                                     player.fishing.retrieve(mainHandItem);
-                                    if(player.isShiftKeyDown() 
+                                    if(isShift
                                     		&& power.getTypeSpecificData(ModPowers.HAMON.get()).get().isSkillLearned(ModHamonSkills.HAMON_SHOCK.get())
                                     		&& HamonUtil.isLiving(hookedMob)) {
                                     	hookedMob.addEffect(new EffectInstance(ModStatusEffects.HAMON_SHOCK.get(), 60, 0, false, false, true));
                                     	player.getCooldowns().addCooldown(mainHandItem.getItem(), 100);
+                                    	power.consumeEnergy(270F);
                                     } else {
                                     	player.getCooldowns().addCooldown(mainHandItem.getItem(), 10);
                                     }

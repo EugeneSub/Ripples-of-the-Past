@@ -40,6 +40,9 @@ public class ModPlayerAnimations {
     public static BasicToggleAnim lightFlashDecoy;
     public static BasicToggleAnim atmosphericRift;
     public static BasicToggleAnim pillarmanPossession;
+    public static BasicToggleAnim snakeMuffler;
+    public static BasicToggleAnim hamonHealing;
+    public static BasicToggleAnim hamonConfusion;
 
     /** 
      * This string must match the full name of the class and the package it's in.<br>
@@ -117,6 +120,18 @@ public class ModPlayerAnimations {
                 "com.github.standobyte.jojo.client.playeranim.anim.kosmximpl.hamon.KosmXRebuffOverdriveHandler",
                 new ResourceLocation(JojoMod.MOD_ID, "rebuff_overdrive"), 1, 
                 WindupAttackAnim.NoPlayerAnimator::new);
+        
+        snakeMuffler = PlayerAnimationHandler.getPlayerAnimator().registerBasicAnimLayer(
+                "com.github.standobyte.jojo.client.playeranim.anim.kosmximpl.hamon.KosmXSnakeMuffler",
+                new ResourceLocation(JojoMod.MOD_ID, "snake_muffler"), 1);
+        
+        hamonHealing = PlayerAnimationHandler.getPlayerAnimator().registerBasicAnimLayer(
+                "com.github.standobyte.jojo.client.playeranim.anim.kosmximpl.hamon.KosmXHamonHealing",
+                new ResourceLocation(JojoMod.MOD_ID, "hamon_healing"), 1);
+        
+        hamonConfusion = PlayerAnimationHandler.getPlayerAnimator().registerBasicAnimLayer(
+                "com.github.standobyte.jojo.client.playeranim.anim.kosmximpl.hamon.KosmXHamonConfusion",
+                new ResourceLocation(JojoMod.MOD_ID, "hamon_confusion"), 1);
         
         
         

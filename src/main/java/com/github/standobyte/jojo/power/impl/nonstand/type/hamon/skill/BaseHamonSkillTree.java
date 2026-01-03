@@ -37,8 +37,8 @@ public class BaseHamonSkillTree {
             .addSkill(ModHamonSkills.PROTECTION).build("attractant_repellent");
     
     public static final BaseHamonSkillTree BODY_MANIPULATION = new BaseHamonSkillTree.Builder()
-            .addSkill(ModHamonSkills.DETECTOR).endTier()
-            .addSkill(ModHamonSkills.HYPNOSIS).addSkill(ModHamonSkills.HAMON_SHOCK).endTier()
+            .addSkill(ModHamonSkills.DETECTOR).addSkill(ModHamonSkills.HYPNOSIS).endTier()
+            .addSkill(ModHamonSkills.HAMON_SHOCK).addSkill(ModHamonSkills.HAMON_CONFUSION).endTier()
             .addSkill(ModHamonSkills.HAMON_SPREAD).build("body_manipulation");
     
     protected List<List<? extends AbstractHamonSkill>> tiers;

@@ -7,11 +7,14 @@ import java.util.UUID;
 
 import com.github.standobyte.jojo.action.ActionConditionResult;
 import com.github.standobyte.jojo.action.ActionTarget;
+import com.github.standobyte.jojo.action.non_stand.HamonSnakeMuffler.Instance;
 import com.github.standobyte.jojo.action.player.ContinuousActionInstance;
 import com.github.standobyte.jojo.action.player.IPlayerAction;
 import com.github.standobyte.jojo.capability.entity.PlayerUtilCap;
 import com.github.standobyte.jojo.client.playeranim.anim.ModPlayerAnimations;
+import com.github.standobyte.jojo.client.sound.ClientTickingSoundsHelper;
 import com.github.standobyte.jojo.client.sound.HamonSparksLoopSound;
+import com.github.standobyte.jojo.init.ModSounds;
 import com.github.standobyte.jojo.init.power.non_stand.ModPowers;
 import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
 import com.github.standobyte.jojo.power.impl.nonstand.type.hamon.skill.BaseHamonSkill.HamonStat;
@@ -46,13 +49,10 @@ public class HamonSendoWaveKick extends HamonAction implements IPlayerAction<Ham
             if (!user.level.isClientSide()) {
                 user.setOnGround(false);
                 setPlayerAction(user, power);
-            }
-            else {
-                user.setOnGround(false);
-                user.hasImpulse = true;
-                Vector3d leap = Vector3d.directionFromRotation(MathHelper.clamp(user.xRot, -45F, -18F), user.yRot)
-                        .scale(1 + user.getAttributeValue(Attributes.MOVEMENT_SPEED) * 5);
-                user.setDeltaMovement(leap.x, leap.y * 0.5, leap.z);
+            } else {
+            	ClientTickingSoundsHelper.playStoppableEntitySound(user, ModSounds.HAMON_SYO_CHARGE.get(), 
+                        1.1F, 1.0F, false, entity -> ContinuousActionInstance.getCurrentAction(user).map(
+                                playerAction -> playerAction.isStopped()).orElse(false), Instance.USUAL_SENDO_WAVE_KICK_DURATION);
             }
         }
     }
@@ -114,65 +114,84 @@ public class HamonSendoWaveKick extends HamonAction implements IPlayerAction<Ham
             return DamageUtil.isMeleeAttack(dmgSource);
         }
 
-        private static final int USUAL_SENDO_WAVE_KICK_DURATION = 10;
+        private static final int USUAL_SENDO_WAVE_KICK_DURATION = 30;
         @Override
         public void playerTick() {
             LivingEntity user = getUser();
-            if (!user.level.isClientSide()) {
-                if (positionWaitingTimer >= 0) {
-                    // FIXME ! (hamon 2) check if the client sent position
-                    boolean clientSentPosition = true;
-                    if (clientSentPosition) {
-                        positionWaitingTimer = -1;
-                    }
-                    else {
-                        positionWaitingTimer++;
-                    }
-                }
-                if (positionWaitingTimer < 0 && (user.isOnGround() || !user.level.getFluidState(user.blockPosition()).isEmpty())
-                        || positionWaitingTimer >= USUAL_SENDO_WAVE_KICK_DURATION) {
-                    stopAction();
-                    return;
-                }
-                
-                List<LivingEntity> targets = user.level.getEntitiesOfClass(LivingEntity.class, kickHitbox(user), 
-                        entity -> !entity.is(user) && user.canAttack(entity));
-                boolean points = false;
-                for (LivingEntity target : targets) {
-                    if (damagedEntities.add(target.getUUID())) {
-                        boolean kickDamage = dealPhysicalDamage(user, target);
-                        boolean hamonDamage = DamageUtil.dealHamonDamage(target, 3.0F, user, null);
-                        if (kickDamage || hamonDamage) {
-                            Vector3d vecToTarget = target.position().subtract(user.position());
-                            boolean left = MathHelper.wrapDegrees(
-                                    user.yBodyRot - MathUtil.yRotDegFromVec(vecToTarget))
-                                    < 0;
-                            float knockbackYRot = (60F + user.getRandom().nextFloat() * 30F) * (left ? 1 : -1);
-                            knockbackYRot += (float) -MathHelper.atan2(vecToTarget.x, vecToTarget.z) * MathUtil.RAD_TO_DEG;
-                            DamageUtil.knockback((LivingEntity) target, 0.75F, knockbackYRot);
-                            
-                            if (hamonDamage) {
-                                points = true;
-                            }
-                        }
-                    }
-                }
-
-                if (!gavePoints && points) {
-                    INonStandPower.getNonStandPowerOptional(user).ifPresent(power -> {
-                        power.getTypeSpecificData(ModPowers.HAMON.get()).ifPresent(hamon -> {
-                            hamon.hamonPointsFromAction(HamonStat.STRENGTH, energySpent); 
-                        });
-                    });
-                    gavePoints = true;
-                }
+            
+            switch(getTick()) {
+	        case 15:
+	            if(user.level.isClientSide && user.isOnGround()) {
+	            	user.setOnGround(false);
+	                user.hasImpulse = true;
+	                Vector3d leap = Vector3d.directionFromRotation(MathHelper.clamp(user.xRot, -45F, -18F), user.yRot)
+	                        .scale(1 + user.getAttributeValue(Attributes.MOVEMENT_SPEED) * 7.5F);
+	                user.setDeltaMovement(leap.x, leap.y * 0.5, leap.z);
+	            }
+	            break;
             }
             
+            if(getTick() > 15) {
+	            if (!user.level.isClientSide()) {
+	                if (positionWaitingTimer >= 0) {
+	                    // FIXME ! (hamon 2) check if the client sent position
+	                    boolean clientSentPosition = true;
+	                    if (clientSentPosition) {
+	                        positionWaitingTimer = -1;
+	                    }
+	                    else {
+	                        positionWaitingTimer++;
+	                    }
+	                }
+	                if (positionWaitingTimer < 0 && (user.isOnGround() || !user.level.getFluidState(user.blockPosition()).isEmpty())
+	                        || positionWaitingTimer >= USUAL_SENDO_WAVE_KICK_DURATION) {
+	                    stopAction();
+	                    return;
+	                }
+	                
+	                List<LivingEntity> targets = user.level.getEntitiesOfClass(LivingEntity.class, kickHitbox(user), 
+	                        entity -> !entity.is(user) && user.canAttack(entity));
+	                boolean points = false;
+	                for (LivingEntity target : targets) {
+	                    if (damagedEntities.add(target.getUUID())) {
+	                        boolean kickDamage = dealPhysicalDamage(user, target);
+	                        boolean hamonDamage = DamageUtil.dealHamonDamage(target, 3.0F, user, null);
+	                        if (kickDamage || hamonDamage) {
+	                            Vector3d vecToTarget = target.position().subtract(user.position());
+	                            boolean left = MathHelper.wrapDegrees(
+	                                    user.yBodyRot - MathUtil.yRotDegFromVec(vecToTarget))
+	                                    < 0;
+	                            float knockbackYRot = (60F + user.getRandom().nextFloat() * 30F) * (left ? 1 : -1);
+	                            knockbackYRot += (float) -MathHelper.atan2(vecToTarget.x, vecToTarget.z) * MathUtil.RAD_TO_DEG;
+	                            DamageUtil.knockback((LivingEntity) target, 0.75F, knockbackYRot);
+	                            
+	                            if (hamonDamage) {
+	                                points = true;
+	                            }
+	                        }
+	                    }
+	                }
+	
+	                if (!gavePoints && points) {
+	                    INonStandPower.getNonStandPowerOptional(user).ifPresent(power -> {
+	                        power.getTypeSpecificData(ModPowers.HAMON.get()).ifPresent(hamon -> {
+	                            hamon.hamonPointsFromAction(HamonStat.STRENGTH, energySpent); 
+	                        });
+	                    });
+	                    gavePoints = true;
+	                }
+	            }
+            }
             else {
                 HamonSparksLoopSound.playSparkSound(user, new Vector3d(user.getX(), user.getY(0.25), user.getZ()), 1.0F, true);
             }
             
             user.fallDistance = 0;
+        }
+        
+        @Override
+        public float getWalkSpeed() {
+            return 0;
         }
         
         @Override

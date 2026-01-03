@@ -217,7 +217,7 @@ public class HamonData extends TypeSpecificData {
         waterWalkingThisTick = false;
     }
     
-    public static final float ENERGY_TICK_DOWN_AMOUNT = 0.50F;
+    public static final float ENERGY_TICK_DOWN_AMOUNT = 0.30F;
     public float tickEnergy() {
         LivingEntity user = power.getUser();
         if (JojoModUtil.isDyingBody(user)) {
@@ -391,7 +391,7 @@ public class HamonData extends TypeSpecificData {
     }
     
     private float fullEnergyTicks() {
-        float ticks = 800F - (400F * breathingTrainingLevel / MAX_BREATHING_LEVEL);
+        float ticks = 600F - (300F * breathingTrainingLevel / MAX_BREATHING_LEVEL);
         if (meditationCompleted) {
             ticks -= MEDITATION_COMPLETED_ENERGY_REGEN_TIME_REDUCTION;
         }
@@ -1416,9 +1416,9 @@ public class HamonData extends TypeSpecificData {
             float energy = power.getEnergy();
             Action<?> heldAction = power.getHeldAction();
             if (heldAction instanceof HamonSunlightYellowOverdrive) {
-                if (!power.isUserCreative()) {
+                /*if (!power.isUserCreative()) {
                     energy += ((HamonSunlightYellowOverdrive) heldAction).getSpentEnergy(power);
-                }
+                }*/
                 energy *= 2;
             }
             if(energy > 0.70 * power.getMaxEnergy() && getBreathStability() == getMaxBreathStability()) {

@@ -106,7 +106,8 @@ public class ModHamonSkills {
             .build());
     
     public static final RegistryObject<BaseHamonSkill> AFTERIMAGES = HAMON_SKILLS.register("afterimages", 
-            () -> new BaseHamonSkill.Builder(HamonStat.STRENGTH, RewardType.PASSIVE)
+            () -> new BaseHamonSkill.Builder(HamonStat.STRENGTH, RewardType.ABILITY)
+            .unlocks(ModHamonActions.HAMON_AFTERIMAGE)
             .skillBranch(SkillBranch.FLEXIBILITY)
             .requiredSkill(JUMP).requiredSkill(SPEED_BOOST)
             .build());
@@ -181,20 +182,27 @@ public class ModHamonSkills {
             () -> new BaseHamonSkill.Builder(HamonStat.CONTROL, RewardType.ABILITY)
             .unlocks(ModHamonActions.HAMON_HYPNOSIS)
             .skillBranch(SkillBranch.BODY_MANIPULATION)
-            .requiredSkill(DETECTOR)
+            //.requiredSkill(DETECTOR)
             .build());
     
     public static final RegistryObject<BaseHamonSkill> HAMON_SHOCK = HAMON_SKILLS.register("hamon_shock", 
-            () -> new BaseHamonSkill.Builder(HamonStat.CONTROL, RewardType.PASSIVE)
+            () -> new BaseHamonSkill.Builder(HamonStat.CONTROL, RewardType.ABILITY)
             .unlocks(ModHamonActions.HAMON_SHOCK)
             .skillBranch(SkillBranch.BODY_MANIPULATION)
-            .requiredSkill(DETECTOR)
+            //.requiredSkill(DETECTOR)
+            .build());
+    
+    public static final RegistryObject<BaseHamonSkill> HAMON_CONFUSION = HAMON_SKILLS.register("hamon_confusion", 
+            () -> new BaseHamonSkill.Builder(HamonStat.CONTROL, RewardType.ATTACK)
+            .unlocks(ModHamonActions.HAMON_CONFUSION)
+            .skillBranch(SkillBranch.BODY_MANIPULATION)
+            .requiredSkill(HYPNOSIS)
             .build());
     
     public static final RegistryObject<BaseHamonSkill> HAMON_SPREAD = HAMON_SKILLS.register("hamon_spread", 
             () -> new BaseHamonSkill.Builder(HamonStat.CONTROL, RewardType.PASSIVE)
             .skillBranch(SkillBranch.BODY_MANIPULATION)
-            .requiredSkill(HYPNOSIS).requiredSkill(HAMON_SHOCK)
+            .requiredSkill(HYPNOSIS).requiredSkill(HAMON_CONFUSION)
             .build());
     
     
@@ -346,7 +354,8 @@ public class ModHamonSkills {
             .build());
     
     public static final RegistryObject<CharacterTechniqueHamonSkill> SNAKE_MUFFLER = HAMON_SKILLS.register("snake_muffler",
-            () -> new CharacterTechniqueHamonSkill.Builder(RewardType.ITEM)
+            () -> new CharacterTechniqueHamonSkill.Builder(RewardType.ATTACK)
+            .unlocks(ModHamonActions.LISALISA_SNAKE_MUFFLER)
             .requiredSkill(SATIPOROJA_SCARF).requiredSkill(DETECTOR).requiredSkill(JUMP)
             .build());
     

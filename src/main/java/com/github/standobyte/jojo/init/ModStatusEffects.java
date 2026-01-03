@@ -10,6 +10,7 @@ import com.github.standobyte.jojo.entity.stand.StandEntity;
 import com.github.standobyte.jojo.potion.BleedingEffect;
 import com.github.standobyte.jojo.potion.FreezeEffect;
 import com.github.standobyte.jojo.potion.GELifeshotEffect;
+import com.github.standobyte.jojo.potion.HamonConfusionEffect;
 import com.github.standobyte.jojo.potion.HamonShockEffect;
 import com.github.standobyte.jojo.potion.HamonSpreadEffect;
 import com.github.standobyte.jojo.potion.HypnosisEffect;
@@ -57,6 +58,9 @@ public class ModStatusEffects {
     
     public static final RegistryObject<StunEffect> HAMON_SHOCK = EFFECTS.register("hamon_shock", 
             () -> new HamonShockEffect(0xFFC10A).setUncurable());
+    
+    public static final RegistryObject<HamonConfusionEffect> HAMON_CONFUSION = EFFECTS.register("hamon_confusion", 
+            () -> new HamonConfusionEffect(EffectType.HARMFUL, 0x404040).setUncurable());
     
     public static final RegistryObject<ImmobilizeEffect> IMMOBILIZE = EFFECTS.register("immobilize", 
             () -> new ImmobilizeEffect(0x404040).setUncurable());
@@ -112,7 +116,8 @@ public class ModStatusEffects {
                 TIME_STOP.get(), 
                 IMMOBILIZE.get(), 
                 STUN.get(), 
-                HAMON_SHOCK.get(), 
+                HAMON_SHOCK.get(),
+                HAMON_CONFUSION.get(),
                 HYPNOSIS.get(), 
                 HAMON_SPREAD.get(), 
                 FULL_INVISIBILITY.get(), 

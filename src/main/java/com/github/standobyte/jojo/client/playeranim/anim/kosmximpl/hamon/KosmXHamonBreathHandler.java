@@ -5,13 +5,16 @@ import java.util.Map;
 import java.util.Random;
 
 import com.github.standobyte.jojo.JojoMod;
+import com.github.standobyte.jojo.action.ActionTarget.TargetType;
 import com.github.standobyte.jojo.client.playeranim.PlayerAnimationHandler;
 import com.github.standobyte.jojo.client.playeranim.anim.interfaces.BasicToggleAnim;
 import com.github.standobyte.jojo.client.playeranim.kosmx.KosmXPlayerAnimatorInstalled.AnimLayerHandler;
 import com.github.standobyte.jojo.client.playeranim.kosmx.anim.modifier.KosmXFixedFadeModifier;
 import com.github.standobyte.jojo.init.power.non_stand.ModPowers;
+import com.github.standobyte.jojo.init.power.non_stand.hamon.ModHamonActions;
 import com.github.standobyte.jojo.init.power.non_stand.hamon.ModHamonSkills;
 import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
+import com.github.standobyte.jojo.power.impl.nonstand.type.hamon.HamonData;
 import com.github.standobyte.jojo.power.impl.nonstand.type.hamon.skill.CharacterHamonTechnique;
 
 import dev.kosmx.playerAnim.api.layered.IAnimation;
@@ -46,7 +49,7 @@ public class KosmXHamonBreathHandler extends AnimLayerHandler<ModifierLayer<IAni
         }
     }
     
-    private ResourceLocation getAnimPath(PlayerEntity player) {
+    /*private ResourceLocation getAnimPath(PlayerEntity player) {
         ResourceLocation[] poses = INonStandPower.getNonStandPowerOptional(player).resolve()
                 .flatMap(power -> power.getTypeSpecificData(ModPowers.HAMON.get()))
                 .map(hamon -> {
@@ -56,9 +59,28 @@ public class KosmXHamonBreathHandler extends AnimLayerHandler<ModifierLayer<IAni
             return DEFAULT_POSE;
         }
         return poses[RANDOM.nextInt(poses.length)];
+    }*/
+    
+    private static final ResourceLocation BREATH = new ResourceLocation(JojoMod.MOD_ID, "breath_default");
+    private static final ResourceLocation BREATH_AURA = new ResourceLocation(JojoMod.MOD_ID, "hamon_breath_2");
+    private static final ResourceLocation[] ANIMS = new ResourceLocation[] {
+    		BREATH,
+    		BREATH_AURA
+    };
+    private ResourceLocation getAnimPath(PlayerEntity player) {
+        int index = 0;
+        //HamonData hamon = INonStandPower.getPlayerNonStandPower(player).getTypeSpecificData(ModPowers.HAMON.get()).get();
+        if(INonStandPower.getNonStandPowerOptional(player).resolve().flatMap(
+                power -> power.getTypeSpecificData(ModPowers.HAMON.get())
+                .map(hamon -> power.getEnergy() > 0.7 * power.getMaxEnergy())).orElse(false) && INonStandPower.getNonStandPowerOptional(player).resolve().flatMap(
+                        power -> power.getTypeSpecificData(ModPowers.HAMON.get())
+                        .map(hamon -> hamon.getBreathStability() == hamon.getMaxBreathStability())).orElse(false)) {
+        	index = 1;
+        }
+        return ANIMS[index];
     }
     
-    private static final ResourceLocation DEFAULT_POSE = new ResourceLocation(JojoMod.MOD_ID, "breath_default");
+    /*private static final ResourceLocation DEFAULT_POSE = new ResourceLocation(JojoMod.MOD_ID, "breath_default");
     private static final Map<CharacterHamonTechnique, ResourceLocation[]> POSES = Util.make(new HashMap<>(), map -> {
         map.put(ModHamonSkills.CHARACTER_JONATHAN.get(), new ResourceLocation[] {
                 DEFAULT_POSE,
@@ -80,6 +102,6 @@ public class KosmXHamonBreathHandler extends AnimLayerHandler<ModifierLayer<IAni
                 DEFAULT_POSE,
 //                new ResourceLocation(JojoMod.MOD_ID, "breath_lisa_lisa"),
         });
-    });
+    });*/
     
 }

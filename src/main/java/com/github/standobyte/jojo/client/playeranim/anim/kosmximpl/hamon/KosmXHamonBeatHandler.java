@@ -29,15 +29,25 @@ public class KosmXHamonBeatHandler extends AnimLayerHandler<ModifierLayer<IAnima
     }
     
 
-    private static final ResourceLocation ANIM = new ResourceLocation(JojoMod.MOD_ID, "hamon_beat");
+    //private static final ResourceLocation ANIM = new ResourceLocation(JojoMod.MOD_ID, "hamon_beat");
     @Override
     public boolean setAnimEnabled(PlayerEntity player, boolean enabled) {
         if (enabled) {
-            return setAnimFromName((AbstractClientPlayerEntity) player, ANIM);
+            return setAnimFromName((AbstractClientPlayerEntity) player, getAnimPath(player));
         }
         else {
             return fadeOutAnim((AbstractClientPlayerEntity) player, KosmXFixedFadeModifier.standardFadeIn((int) (10 * SPEED), Ease.OUTCUBIC), null);
         }
     }
+    
+    private ResourceLocation getAnimPath(PlayerEntity player) { // FIXME sync pillar man pose variant with all clients
+        return POSES[player.getRandom().nextInt(POSES.length)];
+    }
+    
+    private static final ResourceLocation[] POSES = {
+            new ResourceLocation(JojoMod.MOD_ID, "hamon_beat"),
+            new ResourceLocation(JojoMod.MOD_ID, "hamon_beat_2")
+    };
+
 
 }

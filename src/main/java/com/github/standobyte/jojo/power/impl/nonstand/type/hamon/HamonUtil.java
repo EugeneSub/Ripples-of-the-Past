@@ -109,10 +109,10 @@ public class HamonUtil {
         return HamonRopeTrap.ropeTrap(user, pos, blockState, world, power, hamon);
     }
     
-    @Deprecated
+    /*@Deprecated
     public static boolean snakeMuffler(LivingEntity target, DamageSource dmgSource, float dmgAmount) {
         return HamonSnakeMuffler.snakeMuffler(target, dmgSource, dmgAmount);
-    }
+    }*/
     
     
     

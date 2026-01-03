@@ -2,25 +2,22 @@ package com.github.standobyte.jojo.action.non_stand;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.OptionalInt;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.github.standobyte.jojo.action.ActionConditionResult;
 import com.github.standobyte.jojo.action.ActionTarget;
 import com.github.standobyte.jojo.action.ActionTarget.TargetType;
-import com.github.standobyte.jojo.client.particle.custom.CustomParticlesHelper;
+import com.github.standobyte.jojo.client.playeranim.anim.ModPlayerAnimations;
 import com.github.standobyte.jojo.client.sound.ClientTickingSoundsHelper;
-import com.github.standobyte.jojo.client.sound.HamonSparksLoopSound;
 import com.github.standobyte.jojo.client.ui.actionshud.ActionsOverlayGui;
 import com.github.standobyte.jojo.init.ModSounds;
-import com.github.standobyte.jojo.init.ModStatusEffects;
 import com.github.standobyte.jojo.init.power.non_stand.ModPowers;
 import com.github.standobyte.jojo.init.power.non_stand.hamon.ModHamonSkills;
 import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
 import com.github.standobyte.jojo.power.impl.nonstand.type.hamon.HamonData;
 import com.github.standobyte.jojo.power.impl.nonstand.type.hamon.HamonUtil;
 import com.github.standobyte.jojo.power.impl.nonstand.type.hamon.skill.BaseHamonSkill.HamonStat;
-import com.github.standobyte.jojo.util.mc.MCUtil;
 import com.github.standobyte.jojo.util.mod.JojoModUtil;
 
 import net.minecraft.block.BlockState;
@@ -32,6 +29,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
@@ -55,16 +53,27 @@ public class HamonHealing extends HamonAction {
         super(builder);
     }
     
-    public void onHoldTickClientEffect(LivingEntity user, INonStandPower power, int ticksHeld, boolean reqFulfilled, boolean reqStateChanged) {
-        if (reqStateChanged && reqFulfilled) {
-            ClientTickingSoundsHelper.playHeldActionSound(ModSounds.HAMON_HEALING.get(), 
-                    1.0F, 1.0F, true, user, power, this, 15);
+    @Override
+    protected ActionConditionResult checkSpecificConditions(LivingEntity user, INonStandPower power, ActionTarget target) {
+    	PlayerEntity player = (PlayerEntity) user;
+        if (player.getFoodData().getFoodLevel() == 0) {
+                return conditionMessage("hunger");
+            }
+        return ActionConditionResult.POSITIVE;
+    }
+    
+    @Override
+    public void startedHolding(World world, LivingEntity user, INonStandPower power, ActionTarget target, boolean requirementsFulfilled) {
+        if (requirementsFulfilled && world.isClientSide()) {
+        	ClientTickingSoundsHelper.playStoppableEntitySound(user, ModSounds.HAMON_HEALING.get(), 
+                    1.0F, 1.0F, false, entity -> power.getHeldAction() == this);
         }
     }
+
     
     // TODO bone meal
     // TODO hamon sparks only on hands when curing a target entity (for tracking players too)
-    @Override
+    /*@Override
     protected void holdTick(World world, LivingEntity user, INonStandPower power, 
             int ticksHeld, ActionTarget target, boolean requirementsFulfilled) {
         HamonData hamon = power.getTypeSpecificData(ModPowers.HAMON.get()).get();
@@ -158,9 +167,9 @@ public class HamonHealing extends HamonAction {
                         user.getRandomX(1), user.getRandomY(), user.getRandomZ(1), 1);
             }
         }
-    }
+    }*/
     
-    private boolean reduceHarmfulEffect(LivingEntity entity, Effect effect,
+    /*private boolean reduceHarmfulEffect(LivingEntity entity, Effect effect,
             int ticksHeld, int durationDecrease, int reduceEffectTime) {
         EffectInstance effectInstance = entity.getEffect(effect);
         if (effectInstance != null) {
@@ -189,51 +198,53 @@ public class HamonHealing extends HamonAction {
             return true;
         }
         return false;
-    }
+    }*/
     
-    @Override
+    /*@Override
     public void stoppedHolding(World world, LivingEntity user, INonStandPower power, 
             int ticksHeld, boolean willFire) {
         if (!world.isClientSide()) {
             HamonData hamon = power.getTypeSpecificData(ModPowers.HAMON.get()).get();
             hamon.regenImpliedDuration = OptionalInt.empty();
         }
-    }
+    }*/
     
-//    @Override
-//    protected void perform(World world, LivingEntity user, INonStandPower power, ActionTarget target) {
-//        HamonData hamon = power.getTypeSpecificData(ModPowers.HAMON.get()).get();
-//        float cost = getEnergyCost(power, target);
-//        float hamonEfficiency = hamon.getActionEfficiency(cost, true);
-//        float hamonControl = hamon.getHamonControlLevelRatio();
-//        
-//        if (!world.isClientSide() && hamonEfficiency > 0) {
-//            Entity targetEntity = target.getType() == TargetType.ENTITY && hamon.isSkillLearned(ModHamonSkills.HEALING_TOUCH.get()) ? target.getEntity() : null;
-//            LivingEntity targetLiving = targetEntity instanceof LivingEntity ? (LivingEntity) targetEntity : null;
-//            LivingEntity entityToHeal = targetEntity != null && canBeHealed(targetLiving, user) ? targetLiving : user;
-//            int regenDuration = (int) ((50F + hamonEfficiency * 50F) * (1 + hamonControl));
-//            int regenLvl = MathHelper.clamp((int) ((hamonControl - 0.0001F) * 3 + (hamonEfficiency - 0.75F) * 4 - 1), 0, 2);
-////            if (entityToHeal.getHealth() < entityToHeal.getMaxHealth()) {
-//                addPointsForAction(power, hamon, HamonStat.CONTROL, cost, hamonEfficiency);
-////            }
-//            
-//            updateRegenEffect(entityToHeal, regenDuration, regenLvl);
-//            if (hamon.isSkillLearned(ModHamonSkills.EXPEL_VENOM.get())) {
-//                if (VENOM_EFFECTS == null) {
-//                    lazyInitVenomEffects();
-//                }
-//                for (Effect effect : VENOM_EFFECTS) {
-//                    entityToHeal.removeEffect(effect);
-//                }
-//            }
-//            if (hamon.isSkillLearned(ModHamonSkills.PLANTS_GROWTH.get()) && user instanceof PlayerEntity && target.getType() == TargetType.BLOCK) {
-//                Direction face = target.getType() == TargetType.BLOCK ? target.getFace() : Direction.UP;
-//                bonemealEffect(user.level, (PlayerEntity) user, target.getBlockPos(), face);
-//            }
-//            Vector3d sparksPos = new Vector3d(entityToHeal.getX(), entityToHeal.getY(0.5), entityToHeal.getZ());
-//            HamonUtil.emitHamonSparkParticles(world, null, sparksPos, Math.max(0.5F * hamonControl * hamonEfficiency, 0.1F));
-//        }
-//    }
+    @Override
+    protected void perform(World world, LivingEntity user, INonStandPower power, ActionTarget target) {
+        HamonData hamon = power.getTypeSpecificData(ModPowers.HAMON.get()).get();
+        float cost = getEnergyCost(power, target);
+        float hamonEfficiency = hamon.getActionEfficiency(cost, true);
+        float hamonControl = hamon.getHamonControlLevelRatio();
+        
+        if (!world.isClientSide() && hamonEfficiency > 0) {
+            Entity targetEntity = target.getType() == TargetType.ENTITY && hamon.isSkillLearned(ModHamonSkills.HEALING_TOUCH.get()) ? target.getEntity() : null;
+            LivingEntity targetLiving = targetEntity instanceof LivingEntity ? (LivingEntity) targetEntity : null;
+            LivingEntity entityToHeal = targetEntity != null && canBeHealed(targetLiving, user) ? targetLiving : user;
+            int regenDuration = (int) ((50F + hamonEfficiency * 50F) * (2 + hamonControl));
+            int regenLvl = MathHelper.floor(2.9F * hamonControl);
+            if (entityToHeal.getHealth() < entityToHeal.getMaxHealth()) {
+                addPointsForAction(power, hamon, HamonStat.CONTROL, cost * 1.5F, hamonEfficiency);
+            } else {
+            	addPointsForAction(power, hamon, HamonStat.CONTROL, cost, hamonEfficiency);
+            }
+            entityToHeal.addEffect(new EffectInstance(Effects.REGENERATION, regenDuration, regenLvl, false, false, true));
+            updateRegenEffect(entityToHeal, regenDuration, regenLvl, Effects.REGENERATION);
+            if (hamon.isSkillLearned(ModHamonSkills.EXPEL_VENOM.get())) {
+                /*if (VENOM_EFFECTS == null) {
+                    lazyInitVenomEffects();
+                }*/
+                for (Effect effect : VENOM_EFFECTS) {
+                    entityToHeal.removeEffect(effect);
+                }
+            }
+            if (hamon.isSkillLearned(ModHamonSkills.PLANTS_GROWTH.get()) && user instanceof PlayerEntity && target.getType() == TargetType.BLOCK) {
+                Direction face = target.getType() == TargetType.BLOCK ? target.getFace() : Direction.UP;
+                bonemealEffect(user.level, (PlayerEntity) user, target.getBlockPos(), face);
+            }
+            Vector3d sparksPos = new Vector3d(entityToHeal.getX(), entityToHeal.getY(0.5), entityToHeal.getZ());
+            HamonUtil.emitHamonSparkParticles(world, null, sparksPos, Math.max(0.5F * hamonControl * hamonEfficiency, 0.1F));
+        }
+    }
     
     private static List<Effect> VENOM_EFFECTS;
     public static void initVenomEffects() {
@@ -247,7 +258,7 @@ public class HamonHealing extends HamonAction {
         return updateEffect(entity, duration, level, effect, 50);
     }
 
-    public static int updateKnownEffect(LivingEntity entity, int duration, int level, Effect effect) {
+    /*public static int updateKnownEffect(LivingEntity entity, int duration, int level, Effect effect) {
         if (effect == Effects.REGENERATION || effect == ModStatusEffects.UNDEAD_REGENERATION.get()) {
             return updateEffect(entity, duration, level, effect, 50);
         }
@@ -259,7 +270,7 @@ public class HamonHealing extends HamonAction {
         }
         
         return duration;
-    }
+    }*/
     
     // prevents the health regeneration/damage being faster or slower than it should be when giving an effect frequently
     public static int updateEffect(LivingEntity entity, int duration, int level, Effect effect, int level0Gap) {
@@ -329,6 +340,21 @@ public class HamonHealing extends HamonAction {
                 return false;
             }
         }
+    }
+    
+    @Override
+    public boolean cancelHeldOnGettingAttacked(INonStandPower power, DamageSource dmgSource, float dmgAmount) {
+        return true;
+    }
+    
+    @Override
+    public boolean clHeldStartAnim(PlayerEntity user) {
+        return ModPlayerAnimations.hamonHealing.setAnimEnabled(user, true);
+    }
+    
+    @Override
+    public void clHeldStopAnim(PlayerEntity user) {
+        ModPlayerAnimations.hamonHealing.setAnimEnabled(user, false);
     }
 
     // f this
