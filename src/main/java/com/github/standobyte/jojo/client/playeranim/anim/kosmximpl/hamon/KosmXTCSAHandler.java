@@ -18,16 +18,16 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
 
-public class KosmXSnakeMuffler extends AnimLayerHandler<ModifierLayer<IAnimation>> implements BasicToggleAnim {
-	private static final float SPEED = 1.2F;
+public class KosmXTCSAHandler extends AnimLayerHandler<ModifierLayer<IAnimation>> implements BasicToggleAnim {
+	//private static final float SPEED = 1.2F;
 
-    public KosmXSnakeMuffler(ResourceLocation id) {
+    public KosmXTCSAHandler(ResourceLocation id) {
         super(id);
     }
 
     @Override
     protected ModifierLayer<IAnimation> createAnimLayer(AbstractClientPlayerEntity player) {
-        return new ModifierLayer<>(null, new KosmXHeadRotationModifier(), new SpeedModifier(SPEED));
+        return new ModifierLayer<>(null, new KosmXHeadRotationModifier());
     }
     
     
@@ -43,5 +43,5 @@ public class KosmXSnakeMuffler extends AnimLayerHandler<ModifierLayer<IAnimation
         }
     }
     
-    private static final ResourceLocation PATH = new ResourceLocation(JojoMod.MOD_ID, "snake_muffler");
+    private static final ResourceLocation PATH = new ResourceLocation(JojoMod.MOD_ID, "tcsa");
 }

@@ -7,6 +7,7 @@ import com.github.standobyte.jojo.action.player.ContinuousActionInstance;
 import com.github.standobyte.jojo.action.player.IPlayerAction;
 import com.github.standobyte.jojo.capability.entity.PlayerUtilCap;
 import com.github.standobyte.jojo.client.playeranim.anim.ModPlayerAnimations;
+import com.github.standobyte.jojo.client.sound.ClientTickingSoundsHelper;
 import com.github.standobyte.jojo.init.ModParticles;
 import com.github.standobyte.jojo.init.ModSounds;
 import com.github.standobyte.jojo.init.ModStatusEffects;
@@ -53,16 +54,17 @@ public class HamonSunlightYellowOverdriveBarrage extends HamonAction implements 
     
     @Override
     public void startedHolding(World world, LivingEntity user, INonStandPower power, ActionTarget target, boolean requirementsFulfilled) {
-//        if (requirementsFulfilled && world.isClientSide()) {
-//            ClientTickingSoundsHelper.playStoppableEntitySound(user, ModSounds.HAMON_SYO_CHARGE.get(), 1.0F, 1.0F, false, entity -> power.getHeldAction() != this);
-//        }
+        if (requirementsFulfilled && world.isClientSide()) {
+            ClientTickingSoundsHelper.playStoppableEntitySound(user, ModSounds.HAMON_SYO_CHARGE.get(),
+            		1.0F, 1.0F, false, entity -> power.getHeldAction() == this);
+        }
     }
     
     @Override
     protected void holdTick(World world, LivingEntity user, INonStandPower power, int ticksHeld, ActionTarget target, boolean requirementsFulfilled) {
         if (requirementsFulfilled) {
             if (!world.isClientSide()) {
-                power.consumeEnergy(power.getMaxEnergy() / 100);
+                power.consumeEnergy(power.getMaxEnergy() / 1000);
             }
         }
     }
@@ -106,7 +108,7 @@ public class HamonSunlightYellowOverdriveBarrage extends HamonAction implements 
             super(user, userCap, playerPower, action);
         }
 
-        private static final int MAX_BARRAGE_DURATION = 70;
+        private static final int MAX_BARRAGE_DURATION = 50;
         private static final int FINISHING_PUNCH_DURATION = 10;
         
         public void startFinishingPunch() {
@@ -132,7 +134,7 @@ public class HamonSunlightYellowOverdriveBarrage extends HamonAction implements 
                         HamonData hamon = power.getTypeSpecificData(ModPowers.HAMON.get()).get();
                         float efficiency = hamon.getActionEfficiency(0, false, ModHamonSkills.SUNLIGHT_YELLOW_OVERDRIVE_BARRAGE.get());
 
-                        float damage = 15F;
+                        float damage = 10F;
                         damage *= efficiency;
 
                         if (DamageUtil.dealHamonDamage(targetEntity, damage, user, null, attack -> attack.hamonParticle(ModParticles.HAMON_SPARK_YELLOW.get()))) {

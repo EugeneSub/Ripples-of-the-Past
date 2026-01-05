@@ -215,7 +215,7 @@ public class HamonPowerType extends NonStandPowerType<HamonData> {
                             if (hooked != null) {
                                 float energyCost = 30;
                                 if (power.consumeEnergy(energyCost)) {
-                                    DamageUtil.dealHamonDamage(hooked, 1.25F, player.fishing, player);
+                                    DamageUtil.dealHamonDamage(hooked, 1.75F, player.fishing, player);
                                     hamon.hamonPointsFromAction(HamonStat.STRENGTH, energyCost);
                                     player.fishing.retrieve(mainHandItem);
                                     if(isShift

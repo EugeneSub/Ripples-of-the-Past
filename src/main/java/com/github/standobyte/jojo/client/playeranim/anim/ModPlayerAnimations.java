@@ -43,6 +43,8 @@ public class ModPlayerAnimations {
     public static BasicToggleAnim snakeMuffler;
     public static BasicToggleAnim hamonHealing;
     public static BasicToggleAnim hamonConfusion;
+    public static BasicToggleAnim caesarFinalHamon;
+    public static BasicToggleAnim tcsa;
 
     /** 
      * This string must match the full name of the class and the package it's in.<br>
@@ -122,16 +124,24 @@ public class ModPlayerAnimations {
                 WindupAttackAnim.NoPlayerAnimator::new);
         
         snakeMuffler = PlayerAnimationHandler.getPlayerAnimator().registerBasicAnimLayer(
-                "com.github.standobyte.jojo.client.playeranim.anim.kosmximpl.hamon.KosmXSnakeMuffler",
+                "com.github.standobyte.jojo.client.playeranim.anim.kosmximpl.hamon.KosmXSnakeMufflerHandler",
                 new ResourceLocation(JojoMod.MOD_ID, "snake_muffler"), 1);
         
         hamonHealing = PlayerAnimationHandler.getPlayerAnimator().registerBasicAnimLayer(
-                "com.github.standobyte.jojo.client.playeranim.anim.kosmximpl.hamon.KosmXHamonHealing",
+                "com.github.standobyte.jojo.client.playeranim.anim.kosmximpl.hamon.KosmXHamonHealingHandler",
                 new ResourceLocation(JojoMod.MOD_ID, "hamon_healing"), 1);
         
         hamonConfusion = PlayerAnimationHandler.getPlayerAnimator().registerBasicAnimLayer(
-                "com.github.standobyte.jojo.client.playeranim.anim.kosmximpl.hamon.KosmXHamonConfusion",
+                "com.github.standobyte.jojo.client.playeranim.anim.kosmximpl.hamon.KosmXHamonConfusionHandler",
                 new ResourceLocation(JojoMod.MOD_ID, "hamon_confusion"), 1);
+        
+        caesarFinalHamon = PlayerAnimationHandler.getPlayerAnimator().registerBasicAnimLayer(
+                "com.github.standobyte.jojo.client.playeranim.anim.kosmximpl.hamon.KosmXCaesarFinalHamonHandler",
+                new ResourceLocation(JojoMod.MOD_ID, "caesar_final_hamon"), 1);
+        
+        tcsa = PlayerAnimationHandler.getPlayerAnimator().registerBasicAnimLayer(
+                "com.github.standobyte.jojo.client.playeranim.anim.kosmximpl.hamon.KosmXTCSAHandler",
+                new ResourceLocation(JojoMod.MOD_ID, "tcsa"), 1);
         
         
         

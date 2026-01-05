@@ -25,10 +25,10 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
 
-public class KosmXHamonHealing extends AnimLayerHandler<ModifierLayer<IAnimation>> implements BasicToggleAnim {
+public class KosmXHamonHealingHandler extends AnimLayerHandler<ModifierLayer<IAnimation>> implements BasicToggleAnim {
 	//private static final float SPEED = 1.4F;
 
-    public KosmXHamonHealing(ResourceLocation id) {
+    public KosmXHamonHealingHandler(ResourceLocation id) {
         super(id);
     }
 
@@ -71,8 +71,11 @@ public class KosmXHamonHealing extends AnimLayerHandler<ModifierLayer<IAnimation
         			&& player.isShiftKeyDown()
         			&& hamon.isSkillLearned(ModHamonSkills.HEALING_TOUCH.get())) {
         		index = 2;
-        	}
-        	
+        	}	
+        }
+        if(INonStandPower.getNonStandPowerOptional(player).map(power -> power.getHeldAction(true) == ModHamonActions.ZEPPELI_DEEP_PASS_OVERDRIVE.get())
+                .orElse(false)) {
+        	index = 2;
         }
         return ANIMS[index];
     }

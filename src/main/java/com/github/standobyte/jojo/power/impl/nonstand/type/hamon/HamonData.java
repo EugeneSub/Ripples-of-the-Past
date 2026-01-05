@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Random;
 import java.util.Set;
@@ -1440,8 +1441,10 @@ public class HamonData extends TypeSpecificData {
     }
     
     private HamonAuraColor getThisTickAuraColor(LivingEntity user) {
+    	Optional<ContinuousActionInstance<?, ?>> curPlayerAction = ContinuousActionInstance.getCurrentAction(user);
         if (power.getHeldAction() == ModHamonActions.HAMON_SUNLIGHT_YELLOW_OVERDRIVE.get()
-                || power.getHeldAction() == ModHamonActions.JONATHAN_SUNLIGHT_YELLOW_OVERDRIVE_BARRAGE.get()) {
+                || power.getHeldAction() == ModHamonActions.JONATHAN_SUNLIGHT_YELLOW_OVERDRIVE_BARRAGE.get()
+                || curPlayerAction.map(action -> action.getAction() == ModHamonActions.WARRIOR_THUNDER_CROSS_SPLIT_ATTACK.get()).orElse(false)) {
             return HamonAuraColor.YELLOW;
         }
         if (ContinuousActionInstance.getCurrentAction(user)

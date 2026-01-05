@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import com.github.standobyte.jojo.action.ActionConditionResult;
 import com.github.standobyte.jojo.action.ActionTarget;
+import com.github.standobyte.jojo.action.non_stand.HamonSnakeMuffler.Instance;
 import com.github.standobyte.jojo.action.player.ContinuousActionInstance;
 import com.github.standobyte.jojo.action.player.IPlayerAction;
 import com.github.standobyte.jojo.capability.entity.PlayerUtilCap;
@@ -15,7 +16,7 @@ import com.github.standobyte.jojo.client.playeranim.anim.ModPlayerAnimations;
 import com.github.standobyte.jojo.client.sound.ClientTickingSoundsHelper;
 import com.github.standobyte.jojo.client.sound.HamonSparksLoopSound;
 import com.github.standobyte.jojo.entity.damaging.projectile.ownerbound.SnakeMufflerEntity;
-import com.github.standobyte.jojo.init.ModItems;
+import com.github.standobyte.jojo.init.ModParticles;
 import com.github.standobyte.jojo.init.ModSounds;
 import com.github.standobyte.jojo.init.power.non_stand.ModPowers;
 import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
@@ -27,8 +28,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.SoundCategory;
@@ -37,43 +36,28 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
-public class HamonSnakeMuffler extends HamonAction implements IPlayerAction<HamonSnakeMuffler.Instance, INonStandPower> {
+public class HamonThunderCrossSplitAttack extends HamonAction implements IPlayerAction<HamonThunderCrossSplitAttack.Instance, INonStandPower> {
 
-    public HamonSnakeMuffler(HamonAction.Builder builder) {
+    public HamonThunderCrossSplitAttack(HamonAction.Builder builder) {
         super(builder);
     }
     
     @Override
     protected ActionConditionResult checkSpecificConditions(LivingEntity user, INonStandPower power, ActionTarget target) {
-            if (user.getItemBySlot(EquipmentSlotType.HEAD).getItem() != ModItems.SATIPOROJA_SCARF.get()) {
-                return conditionMessage("scarf");
-            }
         return ActionConditionResult.noMessage(user.isOnGround());
     }
 
     @Override
     protected void perform(World world, LivingEntity user, INonStandPower power, ActionTarget target) {
-        if (user instanceof PlayerEntity) {
+    	if (user instanceof PlayerEntity) {
             if (!user.level.isClientSide()) {
-                SnakeMufflerEntity snakeMuffler = new SnakeMufflerEntity(user.level, user);
-                user.level.addFreshEntity(snakeMuffler);
-                snakeMuffler.attachToBlockPos(user.blockPosition());
                 user.setOnGround(false);
                 setPlayerAction(user, power);
             }
             else {
-                user.setOnGround(false);
-                user.hasImpulse = true;
-                Vector3d leap = Vector3d.directionFromRotation(MathHelper.clamp(user.xRot, -45F, -18F), user.yRot)
-                        .scale(1 + user.getAttributeValue(Attributes.MOVEMENT_SPEED));
-                user.setDeltaMovement(leap.x/5, leap.y + 0.5, leap.z/5);
-                world.playSound(ClientUtil.getClientPlayer(), user.getX(), user.getY(), user.getZ(), ModSounds.HAMON_SPARK.get(), 
-                        SoundCategory.AMBIENT, 0.9F, 1.0F);
-                world.playSound(ClientUtil.getClientPlayer(), user.getX(), user.getY(), user.getZ(), ModSounds.HAMON_CONCENTRATION.get(), 
-                        SoundCategory.AMBIENT, 0.9F, 1.0F);
                 ClientTickingSoundsHelper.playStoppableEntitySound(user, ModSounds.HAMON_SYO_CHARGE.get(), 
                         1.1F, 1.0F, false, entity -> ContinuousActionInstance.getCurrentAction(user).map(
-                                playerAction -> playerAction.isStopped()).orElse(false), Instance.USUAL_SNAKE_MUFFLER_DURATION);
+                                playerAction -> playerAction.isStopped()).orElse(false), Instance.USUAL_TCSA_DURATION);
             }
         }
     }
@@ -96,20 +80,20 @@ public class HamonSnakeMuffler extends HamonAction implements IPlayerAction<Hamo
     public Instance createContinuousActionInstance(
             LivingEntity user, PlayerUtilCap userCap, INonStandPower power) {
         if (user.level.isClientSide() && user instanceof PlayerEntity) {
-            ModPlayerAnimations.snakeMuffler.setAnimEnabled((PlayerEntity) user, true);
+            ModPlayerAnimations.tcsa.setAnimEnabled((PlayerEntity) user, true);
         }
-        Instance snakeMuffler = new Instance(user, userCap, power, this);
+        Instance sendoWaveKick = new Instance(user, userCap, power, this);
         
         float energyCost = Math.min(getEnergyCost(power, ActionTarget.EMPTY), power.getEnergy());
         float efficiency = power.getTypeSpecificData(ModPowers.HAMON.get()).get().getActionEfficiency(energyCost, true, getUnlockingSkill());
-        snakeMuffler.setEnergySpent(energyCost * efficiency);
+        sendoWaveKick.setEnergySpent(energyCost * efficiency);
         
-        return snakeMuffler;
+        return sendoWaveKick;
     }
     
     
     
-    public static class Instance extends ContinuousActionInstance<HamonSnakeMuffler, INonStandPower> {
+    public static class Instance extends ContinuousActionInstance<HamonThunderCrossSplitAttack, INonStandPower> {
         private int positionWaitingTimer = 0;
         private boolean gavePoints = false;
         private float energySpent;
@@ -117,7 +101,7 @@ public class HamonSnakeMuffler extends HamonAction implements IPlayerAction<Hamo
         private Set<UUID> damagedEntities = new HashSet<>();
 
         public Instance(LivingEntity user, PlayerUtilCap userCap, 
-                INonStandPower playerPower, HamonSnakeMuffler action) {
+                INonStandPower playerPower, HamonThunderCrossSplitAttack action) {
             super(user, userCap, playerPower, action);
             this.initialYRot = user.yRot;
         }
@@ -129,17 +113,25 @@ public class HamonSnakeMuffler extends HamonAction implements IPlayerAction<Hamo
         public float getInitialYRot() {
             return initialYRot;
         }
-        
-        @Override
-        public boolean cancelIncomingDamage(DamageSource dmgSource, float dmgAmount) {
-        	return true;
-        }
 
-        private static final int USUAL_SNAKE_MUFFLER_DURATION = 40;
+        private static final int USUAL_TCSA_DURATION = 40;
         @Override
         public void playerTick() {
             LivingEntity user = getUser();
-            if(getTick() > 10) {
+            
+            switch(getTick()) {
+	        case 20:
+	            if(user.level.isClientSide && user.isOnGround()) {
+	            	user.setOnGround(false);
+	                user.hasImpulse = true;
+	                Vector3d leap = Vector3d.directionFromRotation(MathHelper.clamp(user.xRot, -45F, -18F), user.yRot)
+	                        .scale(1 + user.getAttributeValue(Attributes.MOVEMENT_SPEED));
+	                user.setDeltaMovement(leap.x / 2, leap.y + 0.7, leap.z / 2);
+	            }
+	            break;
+            }
+            
+            if(getTick() > 30) {
 	            if (!user.level.isClientSide()) {
 	                if (positionWaitingTimer >= 0) {
 	                    // FIXME ! (hamon 2) check if the client sent position
@@ -152,9 +144,8 @@ public class HamonSnakeMuffler extends HamonAction implements IPlayerAction<Hamo
 	                    }
 	                }
 	                if (positionWaitingTimer < 0 && (user.isOnGround() || !user.level.getFluidState(user.blockPosition()).isEmpty())
-	                        || positionWaitingTimer >= USUAL_SNAKE_MUFFLER_DURATION) {
+	                        || positionWaitingTimer >= USUAL_TCSA_DURATION) {
 	                    stopAction();
-	                    playerPower.setCooldownTimer(getAction(), 60);
 	                    return;
 	                }
 	                
@@ -164,7 +155,7 @@ public class HamonSnakeMuffler extends HamonAction implements IPlayerAction<Hamo
 	                for (LivingEntity target : targets) {
 	                    if (damagedEntities.add(target.getUUID())) {
 	                        boolean kickDamage = dealPhysicalDamage(user, target);
-	                        boolean hamonDamage = DamageUtil.dealHamonDamage(target, 3.0F, user, null);
+	                        boolean hamonDamage = DamageUtil.dealHamonDamage(target, 15.0F, user, null, attack -> attack.hamonParticle(ModParticles.HAMON_SPARK_YELLOW.get()));
 	                        if (kickDamage || hamonDamage) {
 	                            Vector3d vecToTarget = target.position().subtract(user.position());
 	                            boolean left = MathHelper.wrapDegrees(
@@ -190,73 +181,27 @@ public class HamonSnakeMuffler extends HamonAction implements IPlayerAction<Hamo
 	                    gavePoints = true;
 	                }
 	            }
-	            
-	            else {
-	                HamonSparksLoopSound.playSparkSound(user, new Vector3d(user.getX(), user.getY(0.25), user.getZ()), 1.0F, true);
-	            }
             }
-	            user.fallDistance = 0;
-	        }
+            else {
+                HamonSparksLoopSound.playSparkSound(user, new Vector3d(user.getX(), user.getY(0.25), user.getZ()), 1.0F, true);
+            }
+            
+            user.fallDistance = 0;
+        }
+        
+        @Override
+        public float getWalkSpeed() {
+            return 0;
+        }
         
         @Override
         public void onStop() {
             super.onStop();
             if (user.level.isClientSide() && user instanceof PlayerEntity) {
-                ModPlayerAnimations.snakeMuffler.setAnimEnabled((PlayerEntity) user, false);
+                ModPlayerAnimations.tcsa.setAnimEnabled((PlayerEntity) user, false);
             }
         }
         
     }
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-    /*public static boolean snakeMuffler(LivingEntity target, DamageSource dmgSource, float dmgAmount) {
-        if (!target.level.isClientSide() && target.canUpdate() && target.isOnGround()) {
-            Entity attacker = dmgSource.getEntity();
-            if (attacker != null && dmgSource.getDirectEntity() == attacker && attacker instanceof LivingEntity
-                    && target instanceof PlayerEntity && target.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModItems.SATIPOROJA_SCARF.get()) {
-                LivingEntity livingAttacker = (LivingEntity) attacker;
-                PlayerEntity playerTarget = (PlayerEntity) target;
-                if (!playerTarget.getCooldowns().isOnCooldown(ModItems.SATIPOROJA_SCARF.get())) {
-                    INonStandPower power = INonStandPower.getPlayerNonStandPower(playerTarget);
-                    float energyCost = 500F;
-                    if (power.hasEnergy(energyCost)) {
-                        if (power.getTypeSpecificData(ModPowers.HAMON.get()).map(hamon -> {
-                            if (hamon.isSkillLearned(ModHamonSkills.SNAKE_MUFFLER.get())) {
-                                playerTarget.getCooldowns().addCooldown(ModItems.SATIPOROJA_SCARF.get(), 80);
-                                float efficiency = hamon.getActionEfficiency(energyCost, false, ModHamonSkills.SNAKE_MUFFLER.get());
-                                if (efficiency == 1 || efficiency >= dmgAmount / target.getMaxHealth()) {
-                                    JojoModUtil.sayVoiceLine(target, ModSounds.LISA_LISA_SNAKE_MUFFLER.get());
-                                    power.consumeEnergy(energyCost);
-                                    DamageUtil.dealHamonDamage(attacker, 0.75F, target, null);
-                                    livingAttacker.addEffect(new EffectInstance(Effects.GLOWING, 200));
-                                    SnakeMufflerEntity snakeMuffler = new SnakeMufflerEntity(target.level, target);
-                                    snakeMuffler.setEntityToJumpOver(attacker);
-                                    target.level.addFreshEntity(snakeMuffler);
-                                    snakeMuffler.attachToBlockPos(target.blockPosition());
-                                    return true;
-                                }
-                            }
-                            return false;
-                        }).orElse(false)) return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }*/
 }
+

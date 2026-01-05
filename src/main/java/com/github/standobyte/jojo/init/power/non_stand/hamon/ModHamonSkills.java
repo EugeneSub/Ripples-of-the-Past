@@ -242,6 +242,7 @@ public class ModHamonSkills {
                 list.add(ModHamonSkills.METAL_SILVER_OVERDRIVE);
                 list.add(ModHamonSkills.SCARLET_OVERDRIVE);
                 list.add(ModHamonSkills.OVERDRIVE_BARRAGE);
+                list.add(ModHamonSkills.SUNLIGHT_YELLOW_OVERDRIVE_BARRAGE);
             }))
             .perkOnPick(ModHamonSkills.NATURAL_TALENT)
             .baseSkillBranchEfficiency(SkillBranch.OVERDRIVE, 0.2f)
@@ -269,11 +270,18 @@ public class ModHamonSkills {
             .requiredSkill(JUMP).requiredSkill(SPEED_BOOST)
             .build());
     
+    public static final RegistryObject<CharacterTechniqueHamonSkill> DEEP_PASS_OVERDRIVE = HAMON_SKILLS.register("deep_pass_action",
+            () -> new CharacterTechniqueHamonSkill.Builder(RewardType.ATTACK)
+            .unlocks(ModHamonActions.ZEPPELI_DEEP_PASS_OVERDRIVE)
+            .requiredSkill(HEALING_TOUCH)
+            .build());
+    
     public static final RegistryObject<CharacterHamonTechnique> CHARACTER_ZEPPELI = HAMON_CHARACTER_TECHNIQUES.register("zeppeli", 
             () -> new CharacterHamonTechnique.Builder("zeppeli", Util.make(new ArrayList<>(), list -> {
                 list.add(ModHamonSkills.HAMON_CUTTER);
                 list.add(ModHamonSkills.SENDO_WAVE_KICK);
                 list.add(ModHamonSkills.TORNADO_OVERDRIVE);
+                list.add(ModHamonSkills.DEEP_PASS_OVERDRIVE);
             }))
             .perkOnPick(ModHamonSkills.DEEP_PASS)
             .baseSkillBranchEfficiency(SkillBranch.FLEXIBILITY, 0.2f)
@@ -333,11 +341,18 @@ public class ModHamonSkills {
             .requiredSkill(BUBBLE_LAUNCHER).requiredSkill(HAMON_SHOCK)
             .build());
     
+    public static final RegistryObject<CharacterTechniqueHamonSkill> CRIMSON_BUBBLE_ACTION = HAMON_SKILLS.register("crimson_bubble_action",
+            () -> new CharacterTechniqueHamonSkill.Builder(RewardType.ATTACK)
+            .unlocks(ModHamonActions.CAESAR_CRIMSON_BUBBLE)
+            .requiredSkill(THROWABLES_INFUSION)
+            .build());
+    
     public static final RegistryObject<CharacterHamonTechnique> CHARACTER_CAESAR = HAMON_CHARACTER_TECHNIQUES.register("caesar", 
             () -> new CharacterHamonTechnique.Builder("caesar", Util.make(new ArrayList<>(), list -> {
                 list.add(ModHamonSkills.BUBBLE_LAUNCHER);
                 list.add(ModHamonSkills.BUBBLE_CUTTER);
                 list.add(ModHamonSkills.BUBBLE_BARRIER);
+                list.add(ModHamonSkills.CRIMSON_BUBBLE_ACTION);
             }))
             .perkOnPick(ModHamonSkills.CRIMSON_BUBBLE)
             .baseSkillBranchEfficiency(SkillBranch.INFUSION, 0.2f)
@@ -369,5 +384,20 @@ public class ModHamonSkills {
             .baseSkillBranchEfficiency(SkillBranch.FLEXIBILITY, 0.1f)
             .baseSkillBranchEfficiency(SkillBranch.BODY_MANIPULATION, 0.1f)
             .musicOnPick(ModSounds.HAMON_PICK_LISA_LISA).build());
+    
+    public static final RegistryObject<CharacterTechniqueHamonSkill> THUNDER_CROSS_SPLIT_ATTACK = HAMON_SKILLS.register("tcsa",
+            () -> new CharacterTechniqueHamonSkill.Builder(RewardType.ATTACK)
+            .unlocks(ModHamonActions.WARRIOR_THUNDER_CROSS_SPLIT_ATTACK)
+            .requiredSkill(SUNLIGHT_YELLOW_OVERDRIVE).requiredSkill(JUMP)
+            .build());
+    
+    public static final RegistryObject<CharacterHamonTechnique> CHARACTER_UNKNOWN = HAMON_CHARACTER_TECHNIQUES.register("warrior", 
+            () -> new CharacterHamonTechnique.Builder("warrior", Util.make(new ArrayList<>(), list -> {
+                list.add(ModHamonSkills.THUNDER_CROSS_SPLIT_ATTACK);
+            }))
+            .baseSkillBranchEfficiency(SkillBranch.OVERDRIVE, 0.1f)
+            .baseSkillBranchEfficiency(SkillBranch.INFUSION, 0.1f)
+            .baseSkillBranchEfficiency(SkillBranch.FLEXIBILITY, 0.1f)
+            .musicOnPick(ModSounds.MAP_BOUGHT_HAMON_TEMPLE).build());
     
 }

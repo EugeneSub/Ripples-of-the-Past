@@ -79,10 +79,13 @@ public class EnergyRippleLayer<T extends LivingEntity, M extends BipedModel<T>> 
                     || curPlayerAction.map(action -> action.getAction() == ModHamonActions.HAMON_SHOCK.get()).orElse(false)
                     || curPlayerAction.map(action -> action.getAction() == ModHamonActions.HAMON_CONFUSION.get()).orElse(false)
                     || curPlayerAction.map(action -> action.getAction() == ModHamonActions.HAMON_BEAT.get()).orElse(false)
-                    || INonStandPower.getNonStandPowerOptional(entity).map(power -> power.getHeldAction(true) == ModHamonActions.HAMON_HEALING.get()).orElse(false)) {
+                    || INonStandPower.getNonStandPowerOptional(entity).map(power -> power.getHeldAction(true) == ModHamonActions.HAMON_HEALING.get()).orElse(false)
+                    || INonStandPower.getNonStandPowerOptional(entity).map(power -> power.getHeldAction(true) == ModHamonActions.ZEPPELI_DEEP_PASS_OVERDRIVE.get()).orElse(false)
+                    || INonStandPower.getNonStandPowerOptional(entity).map(power -> power.getHeldAction(true) == ModHamonActions.CAESAR_CRIMSON_BUBBLE.get()).orElse(false)) {
                 particle = ModParticles.HAMON_SPARK.get();
             }
-            if (INonStandPower.getNonStandPowerOptional(entity).map(power -> power.getHeldAction(true) == ModHamonActions.HAMON_SUNLIGHT_YELLOW_OVERDRIVE.get()).orElse(false)) {
+            if (INonStandPower.getNonStandPowerOptional(entity).map(power -> power.getHeldAction(true) == ModHamonActions.HAMON_SUNLIGHT_YELLOW_OVERDRIVE.get()).orElse(false)
+            		|| curPlayerAction.map(action -> action.getAction() == ModHamonActions.WARRIOR_THUNDER_CROSS_SPLIT_ATTACK.get()).orElse(false)) {
                 particle = ModParticles.HAMON_SPARK_YELLOW.get();
                 particles = MathUtil.fractionRandomInc((handSparkIntensity * 2) * timeDelta);
                 controlLevel = 0.15F;
