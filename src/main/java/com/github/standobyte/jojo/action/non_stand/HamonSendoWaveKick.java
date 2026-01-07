@@ -126,7 +126,7 @@ public class HamonSendoWaveKick extends HamonAction implements IPlayerAction<Ham
 	                user.hasImpulse = true;
 	                Vector3d leap = Vector3d.directionFromRotation(MathHelper.clamp(user.xRot, -45F, -18F), user.yRot)
 	                        .scale(1 + user.getAttributeValue(Attributes.MOVEMENT_SPEED) * 7.5F);
-	                user.setDeltaMovement(leap.x, leap.y * 0.5, leap.z);
+	                user.setDeltaMovement(leap.x, leap.y * 0.65, leap.z);
 	            }
 	            break;
             }

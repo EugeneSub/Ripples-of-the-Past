@@ -2,6 +2,7 @@ package com.github.standobyte.jojo.action.non_stand;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.OptionalInt;
 import java.util.Set;
 import java.util.UUID;
 
@@ -9,6 +10,7 @@ import com.github.standobyte.jojo.action.ActionConditionResult;
 import com.github.standobyte.jojo.action.ActionTarget;
 import com.github.standobyte.jojo.action.player.ContinuousActionInstance;
 import com.github.standobyte.jojo.action.player.IPlayerAction;
+import com.github.standobyte.jojo.capability.entity.EntityUtilCapProvider;
 import com.github.standobyte.jojo.capability.entity.PlayerUtilCap;
 import com.github.standobyte.jojo.client.ClientUtil;
 import com.github.standobyte.jojo.client.playeranim.anim.ModPlayerAnimations;
@@ -19,13 +21,19 @@ import com.github.standobyte.jojo.init.ModItems;
 import com.github.standobyte.jojo.init.ModSounds;
 import com.github.standobyte.jojo.init.power.non_stand.ModPowers;
 import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
+import com.github.standobyte.jojo.power.impl.nonstand.type.hamon.HamonData;
+import com.github.standobyte.jojo.power.impl.nonstand.type.hamon.HamonPowerType;
 import com.github.standobyte.jojo.power.impl.nonstand.type.hamon.skill.BaseHamonSkill.HamonStat;
+import com.github.standobyte.jojo.power.impl.stand.StandUtil;
 import com.github.standobyte.jojo.util.general.MathUtil;
+import com.github.standobyte.jojo.util.mc.MCUtil;
 import com.github.standobyte.jojo.util.mc.damage.DamageUtil;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.item.ArmorStandEntity;
+import net.minecraft.entity.passive.GolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -51,9 +59,18 @@ public class HamonSnakeMuffler extends HamonAction implements IPlayerAction<Hamo
         return ActionConditionResult.noMessage(user.isOnGround());
     }
 
+    private static final OptionalInt COLOR = OptionalInt.of(HamonPowerType.COLOR);
     @Override
     protected void perform(World world, LivingEntity user, INonStandPower power, ActionTarget target) {
         if (user instanceof PlayerEntity) {
+        	HamonData hamon = power.getTypeSpecificData(ModPowers.HAMON.get()).get();
+        	double controlRatio = (double) hamon.getHamonControlLevel() / (double) HamonData.MAX_STAT_LEVEL * hamon.getActionEfficiency(this.getEnergyCost(power, target), false, getUnlockingSkill());
+            double radius = (double) 40 * (controlRatio * 0.8D + 0.2D);
+            double maxRadius = 8D + controlRatio * 24D;
+        	List<LivingEntity> entitiesAround = MCUtil.entitiesAround(LivingEntity.class, 
+                    user, Math.min(radius, maxRadius), false, 
+                    entity -> StandUtil.getStandUser(entity) != user &&
+                    !(entity instanceof GolemEntity || entity instanceof ArmorStandEntity));
             if (!user.level.isClientSide()) {
                 SnakeMufflerEntity snakeMuffler = new SnakeMufflerEntity(user.level, user);
                 user.level.addFreshEntity(snakeMuffler);
@@ -62,6 +79,10 @@ public class HamonSnakeMuffler extends HamonAction implements IPlayerAction<Hamo
                 setPlayerAction(user, power);
             }
             else {
+            	if (user == ClientUtil.getClientPlayer()) {
+                    entitiesAround.forEach(entity -> entity.getCapability(EntityUtilCapProvider.CAPABILITY).ifPresent(
+                            cap -> cap.setClGlowingColor(COLOR, 100)));
+                }
                 user.setOnGround(false);
                 user.hasImpulse = true;
                 Vector3d leap = Vector3d.directionFromRotation(MathHelper.clamp(user.xRot, -45F, -18F), user.yRot)
