@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import com.github.standobyte.jojo.client.particle.custom.CustomParticlesHelper;
 import com.github.standobyte.jojo.client.sound.HamonSparksLoopSound;
 import com.github.standobyte.jojo.init.ModEntityTypes;
+import com.github.standobyte.jojo.init.ModParticles;
 import com.github.standobyte.jojo.power.impl.nonstand.type.hamon.HamonCharge;
 import com.github.standobyte.jojo.util.mc.MCUtil;
 
@@ -81,7 +82,7 @@ public class HamonBlockChargeEntity extends Entity {
         }
         else {
             HamonSparksLoopSound.playSparkSound(this, pos, 1.0F, true);
-            CustomParticlesHelper.createHamonSparkParticles(null, getRandomX(0.5), getRandomY(), getRandomZ(0.5), 1);
+            CustomParticlesHelper.createHamonSparkParticles(null, getRandomX(0.5), getRandomY(), getRandomZ(0.5), 1, ModParticles.HAMON_SPARK.get());
         }
     }
     

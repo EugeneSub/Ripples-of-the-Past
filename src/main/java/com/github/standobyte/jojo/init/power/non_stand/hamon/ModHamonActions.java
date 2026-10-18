@@ -105,7 +105,7 @@ public class ModHamonActions {
                     .shout(ModHamonSkills.CHARACTER_LISA_LISA, ModSounds.BREATH_LISA_LISA)));
     
     public static final RegistryObject<HamonAction> HAMON_HEALING = ACTIONS.register("hamon_healing", 
-            () -> new HamonHealing(new HamonAction.Builder().holdToFire(80, false).energyCost(250f).heldWalkSpeed(0f)
+            () -> new HamonHealing(new HamonAction.Builder().holdToFire(65, false).energyCost(350f).heldWalkSpeed(0f)
                     .needsFreeMainHand().swingHand()));
     
     public static final RegistryObject<HamonWallClimbing2> HAMON_WALL_CLIMBING = ACTIONS.register("hamon_wall_climbing", 
@@ -143,7 +143,6 @@ public class ModHamonActions {
                             HAMON_SUNLIGHT_YELLOW_OVERDRIVE.get(),
                             HAMON_PLANT_INFUSION.get(),
                             HAMON_ZOOM_PUNCH.get(),
-                            HAMON_CONFUSION.get()
                             //HAMON_TURQUOISE_BLUE_OVERDRIVE.get()
                             },
                     new HamonAction[] {
@@ -178,7 +177,7 @@ public class ModHamonActions {
             () -> new HamonOverdriveBarrage(new HamonAction.Builder().holdEnergyCost(7F).heldWalkSpeed(0.5F).shout(ModSounds.JONATHAN_OVERDRIVE_BARRAGE)));
     
     public static final RegistryObject<HamonSunlightYellowOverdriveBarrage> JONATHAN_SUNLIGHT_YELLOW_OVERDRIVE_BARRAGE = ACTIONS.register("jonathan_syo_barrage", 
-            () -> new HamonSunlightYellowOverdriveBarrage(new HamonAction.Builder().holdToFire(60, false).heldWalkSpeed(0)
+            () -> new HamonSunlightYellowOverdriveBarrage(new HamonAction.Builder().holdToFire(25, false).heldWalkSpeed(0)
                     .shout(ModSounds.JONATHAN_SYO_BARRAGE_START).shiftVariationOf(JONATHAN_OVERDRIVE_BARRAGE)));
     
     public static final RegistryObject<HamonAction> ZEPPELI_HAMON_CUTTER = ACTIONS.register("zeppeli_hamon_cutter", 

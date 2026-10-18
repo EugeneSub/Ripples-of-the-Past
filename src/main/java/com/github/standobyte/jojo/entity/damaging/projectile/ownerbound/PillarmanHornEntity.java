@@ -2,6 +2,7 @@ package com.github.standobyte.jojo.entity.damaging.projectile.ownerbound;
 
 import com.github.standobyte.jojo.init.ModEntityTypes;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.vector.Vector3d;
@@ -24,7 +25,15 @@ public class PillarmanHornEntity extends OwnerBoundProjectileEntity {
     
     @Override
     public float getBaseDamage() {
-        return 0.5F;
+        return 1.0F;
+    }
+    
+    @Override
+    protected boolean hurtTarget(Entity target, LivingEntity owner) {
+    	if(!isRetracting()) {
+    		return hurtTarget(target, getDamageSource(owner), getDamageAmount());
+    	}
+    	return false;
     }
 
     @Override
@@ -44,7 +53,7 @@ public class PillarmanHornEntity extends OwnerBoundProjectileEntity {
     
     @Override
     protected float movementSpeed() {
-        return 0.4F;
+        return 0.7F;
     }
     
     @Override

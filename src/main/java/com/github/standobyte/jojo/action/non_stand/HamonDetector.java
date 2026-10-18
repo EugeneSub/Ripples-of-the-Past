@@ -9,6 +9,7 @@ import com.github.standobyte.jojo.client.ClientUtil;
 import com.github.standobyte.jojo.client.particle.custom.CustomParticlesHelper;
 import com.github.standobyte.jojo.client.sound.ClientTickingSoundsHelper;
 import com.github.standobyte.jojo.client.sound.HamonSparksLoopSound;
+import com.github.standobyte.jojo.init.ModParticles;
 import com.github.standobyte.jojo.init.ModSounds;
 import com.github.standobyte.jojo.init.power.non_stand.ModPowers;
 import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
@@ -60,7 +61,7 @@ public class HamonDetector extends HamonAction {
                     }
                     HamonSparksLoopSound.playSparkSound(user, user.position(), 1.0F);
                     CustomParticlesHelper.createHamonSparkParticles(user instanceof PlayerEntity ? (PlayerEntity) user : null, 
-                            user.getX(), user.getY(0.5), user.getZ(), 1);
+                            user.getX(), user.getY(0.5), user.getZ(), 1, ModParticles.HAMON_SPARK.get());
                 }
                 else if (!entitiesAround.isEmpty()) {
                     hamon.hamonPointsFromAction(HamonStat.CONTROL, Math.min(tickEnergyCost, power.getEnergy()));

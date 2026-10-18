@@ -88,7 +88,7 @@ public class PillarmanBladeSlash extends PillarmanAction implements IPlayerActio
                 if (entity instanceof LivingEntity) {
                     LivingEntity targetEntity = (LivingEntity) entity;
                     PlayerEntity pEntity = (PlayerEntity) user;
-                    if (entity.hurt(EntityDamageSource.playerAttack(pEntity), DamageUtil.addArmorPiercing(VampirismClawLacerate.getDamage(world, user) + 1F, 15F, targetEntity))) {
+                    if (entity.hurt(EntityDamageSource.playerAttack(pEntity), DamageUtil.addArmorPiercing(VampirismClawLacerate.getDamage(world, user) + 6F, 0.4F, targetEntity))) {
                     	PillarmanUtil.sparkEffect(targetEntity, 9);
                     	world.playSound(null, targetEntity.getX(), targetEntity.getEyeY(), targetEntity.getZ(), sound, targetEntity.getSoundSource(), volume, pitch);
                         targetEntity.knockback(0.75F, user.getX() - targetEntity.getX(), user.getZ() - targetEntity.getZ());

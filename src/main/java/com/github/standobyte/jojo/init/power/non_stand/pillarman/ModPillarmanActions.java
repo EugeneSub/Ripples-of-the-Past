@@ -68,10 +68,10 @@ public class ModPillarmanActions {
     // NEXT IS MODE TECHNIQUES---------------------
 
     public static final RegistryObject<PillarmanAction> PILLARMAN_SMALL_SANDSTORM = ACTIONS.register("pillarman_small_sandstorm", 
-            () -> new PillarmanSmallSandstorm(new NonStandAction.Builder().energyCost(20F).cooldown(10).swingHand()));
+            () -> new PillarmanSmallSandstorm(new NonStandAction.Builder().energyCost(40F).cooldown(20).swingHand()));
 
     public static final RegistryObject<PillarmanAction> PILLARMAN_DIVINE_SANDSTORM = ACTIONS.register("pillarman_divine_sandstorm", 
-            () -> new PillarmanDivineSandstorm(new NonStandAction.Builder().holdToFire(40, true).heldWalkSpeed(0.2F)
+            () -> new PillarmanDivineSandstorm(new NonStandAction.Builder().holdToFire(30, true).heldWalkSpeed(0.2F)
                     .shiftVariationOf(PILLARMAN_SMALL_SANDSTORM)));
 
     public static final RegistryObject<PillarmanAction> PILLARMAN_WIND_CLOAK = ACTIONS.register("pillarman_wind_cloak", 

@@ -215,17 +215,16 @@ public class HamonHealing extends HamonAction {
         float cost = getEnergyCost(power, target);
         float hamonEfficiency = hamon.getActionEfficiency(cost, true);
         float hamonControl = hamon.getHamonControlLevelRatio();
-        
         if (!world.isClientSide() && hamonEfficiency > 0) {
             Entity targetEntity = target.getType() == TargetType.ENTITY && hamon.isSkillLearned(ModHamonSkills.HEALING_TOUCH.get()) ? target.getEntity() : null;
             LivingEntity targetLiving = targetEntity instanceof LivingEntity ? (LivingEntity) targetEntity : null;
             LivingEntity entityToHeal = targetEntity != null && canBeHealed(targetLiving, user) ? targetLiving : user;
-            int regenDuration = (int) ((50F + hamonEfficiency * 50F) * (2 + hamonControl));
-            int regenLvl = MathHelper.floor(2.9F * hamonControl);
+            int regenDuration = (int) ((50F + hamonEfficiency * 50F) * (4 + hamonControl));
+            int regenLvl = MathHelper.floor(1.5F * hamonControl);
             if (entityToHeal.getHealth() < entityToHeal.getMaxHealth()) {
-                addPointsForAction(power, hamon, HamonStat.CONTROL, cost * 1.5F, hamonEfficiency);
+                addPointsForAction(power, hamon, HamonStat.CONTROL, cost * 2F, hamonEfficiency);
             } else {
-            	addPointsForAction(power, hamon, HamonStat.CONTROL, cost, hamonEfficiency);
+            	addPointsForAction(power, hamon, HamonStat.CONTROL, cost * 1.5F, hamonEfficiency);
             }
             entityToHeal.addEffect(new EffectInstance(Effects.REGENERATION, regenDuration, regenLvl, false, false, true));
             updateRegenEffect(entityToHeal, regenDuration, regenLvl, Effects.REGENERATION);

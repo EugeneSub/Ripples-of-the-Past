@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import com.github.standobyte.jojo.action.Action;
 import com.github.standobyte.jojo.action.ActionTarget;
 import com.github.standobyte.jojo.action.ActionTarget.TargetType;
+import com.github.standobyte.jojo.advancements.ModCriteriaTriggers;
 import com.github.standobyte.jojo.client.ClientUtil;
 import com.github.standobyte.jojo.client.particle.custom.CustomParticlesHelper;
 import com.github.standobyte.jojo.client.sound.ClientTickingSoundsHelper;
@@ -25,12 +26,17 @@ import com.github.standobyte.jojo.util.general.GeneralUtil;
 import com.github.standobyte.jojo.util.general.LazySupplier;
 import com.github.standobyte.jojo.util.general.ObjectWrapper;
 import com.github.standobyte.jojo.util.mc.damage.DamageUtil;
+import com.github.standobyte.jojo.util.mod.JojoModUtil;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.Hand;
@@ -44,6 +50,7 @@ import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeMod;
 
 public class HamonSendoOverdrive extends HamonAction {
 
@@ -134,37 +141,36 @@ public class HamonSendoOverdrive extends HamonAction {
     	return super.getIconTexturePath(power);
     }
     
-    
+    public void onPerform(World world, LivingEntity user, INonStandPower power, ActionTarget target, @Nullable PacketBuffer extraInput) {
+    	ModifiableAttributeInstance instance = user.getAttribute(ForgeMod.REACH_DISTANCE.get());
+        double reachDistance = instance != null? instance.getValue(): 3.0;
+        power.setMouseTarget(ActionTarget.fromRayTraceResult(JojoModUtil.rayTrace(user, reachDistance, EntityPredicates.NO_SPECTATORS)));
+    	super.onPerform(world, user, power, target, extraInput); 
+    }
     
     @Override
     protected void perform(World world, LivingEntity user, INonStandPower power, ActionTarget target) {
+    	//target = power.getMouseTarget();
+    	if (world.isClientSide()) {
+    		target = ActionTarget.fromRayTraceResult(Minecraft.getInstance().hitResult);
+    	}
         if (target.getType() == TargetType.BLOCK) {
         	BlockState blockState = world.getBlockState(target.getBlockPos());
+        	BlockPos blockPos = target.getBlockPos();
             if (!world.isClientSide()) {
-                BlockPos blockPos = target.getBlockPos();
                 Direction face = target.getFace();
             	HamonData hamon = power.getTypeSpecificData(ModPowers.HAMON.get()).get();
                 float energyCost = getEnergyCost(power, target);
                 float hamonEfficiency = hamon.getActionEfficiency(energyCost, false, getUnlockingSkill());
                 float hamonControl = hamon.getHamonControlLevelRatio();
                 
-                if(user.isShiftKeyDown()) {
+                if(user.isCrouching()) {
                     double diameter = 2 + (double) (hamon.getHamonStrengthLevel() * 4.5) / (double) HamonData.MAX_STAT_LEVEL
                             * hamon.getBloodstreamEfficiency();
                     double radiusMinus1 = (diameter - 1) / 2;
                     AxisAlignedBB aabb = new AxisAlignedBB(blockPos).inflate(radiusMinus1).expandTowards(Vector3d.atLowerCornerOf(face.getNormal()))
                             .move(Vector3d.atLowerCornerOf(face.getNormal()).scale(-radiusMinus1));
-                    Random random = user.getRandom();
-                    int sparksCount = Math.max(MathHelper.floor(diameter * diameter * diameter / 8), 1);
-                    for (int i = 0; i < sparksCount; i++) {
-                    	CustomParticlesHelper.createHamonSparkParticles(null, 
-                                aabb.minX + random.nextDouble() * (aabb.maxX - aabb.minX), 
-                                aabb.minY + random.nextDouble() * (aabb.maxY - aabb.minY), 
-                                aabb.minZ + random.nextDouble() * (aabb.maxZ - aabb.minZ), 
-                                20);
-                    }
-                    world.playSound(ClientUtil.getClientPlayer(), user.getX(), user.getY(), user.getZ(), ModSounds.HAMON_SPARKS_LONG.get(), 
-                            SoundCategory.AMBIENT, 0.75F, 1.0F);
+                    
                     List<Entity> entities = world.getEntitiesOfClass(LivingEntity.class, aabb, EntityPredicates.NO_CREATIVE_OR_SPECTATOR);
                     boolean givePoints = false;
                     for (Entity entity : entities) {
@@ -185,7 +191,7 @@ public class HamonSendoOverdrive extends HamonAction {
                 		|| blockState.is(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE)
                 		|| blockState.is(Blocks.NETHERITE_BLOCK)) && hamon.isSkillLearned(ModHamonSkills.METAL_SILVER_OVERDRIVE.get())) {
                 	
-                	HamonSendoOverdriveEntity sendoOverdrive = new HamonSendoOverdriveEntity(world, user, face.getAxis());
+                	/*HamonSendoOverdriveEntity sendoOverdrive = new HamonSendoOverdriveEntity(world, user, face.getAxis());
                 	float heldRatio = MathHelper.clamp((float) (power.getHeldActionTicks() - 1) / this.getHoldDurationToFire(power), 0, 1);
                 	sendoOverdrive.yRot = user.yRot;
                 	sendoOverdrive.xRot = user.xRot;
@@ -197,7 +203,24 @@ public class HamonSendoOverdrive extends HamonAction {
                 	        
                 	sendoOverdrive.moveTo(Vector3d.atCenterOf(blockPos).subtract(0, sendoOverdrive.getDimensions(null).height * 0.5, 0));
                 	sendoOverdrive.setBlockTarget(target.getBlockPos(), target.getFace());
-                	world.addFreshEntity(sendoOverdrive);
+                	world.addFreshEntity(sendoOverdrive);*/
+                	
+                	double diameter = 2 + (double) (hamon.getHamonStrengthLevel() * 6.5) / (double) HamonData.MAX_STAT_LEVEL
+                            * hamon.getBloodstreamEfficiency();
+                    double radiusMinus1 = (diameter - 1) / 2;
+                    AxisAlignedBB aabb = new AxisAlignedBB(blockPos).inflate(radiusMinus1).expandTowards(Vector3d.atLowerCornerOf(face.getNormal()))
+                            .move(Vector3d.atLowerCornerOf(face.getNormal()).scale(-radiusMinus1));
+                    
+                    List<Entity> entities = world.getEntitiesOfClass(LivingEntity.class, aabb, EntityPredicates.NO_CREATIVE_OR_SPECTATOR);
+                    boolean givePoints = false;
+                    for (Entity entity : entities) {
+                        if (!entity.is(user) && DamageUtil.dealHamonDamage(entity, 3.0F, user, null, attack -> attack.hamonParticle(ModParticles.HAMON_SPARK_SILVER.get()))) {
+                            givePoints = true;
+                        }
+                    }
+                    if (givePoints) {
+                        hamon.hamonPointsFromAction(HamonStat.STRENGTH, getEnergyCost(power, target));
+                    }
                 }
                 else {
 	                HamonSendoOverdriveEntity2 overdriveWave = new HamonSendoOverdriveEntity2(world, user)
@@ -207,12 +230,61 @@ public class HamonSendoOverdrive extends HamonAction {
 	                        .setDuration(30 + (int) (20 * hamonControl));
 	                overdriveWave.shootFromRotation(user, 0.5F, 0);
 	                world.addFreshEntity(overdriveWave);
-	                
-	                power.consumeEnergy(energyCost);
                 }
 	                
             }
             user.swing(Hand.MAIN_HAND, false);
+            HamonData hamon = power.getTypeSpecificData(ModPowers.HAMON.get()).get();
+            if(user.level.isClientSide()) {
+            	if(user.isShiftKeyDown()) {
+	            	world.playSound(ClientUtil.getClientPlayer(), user.getX(), user.getY(), user.getZ(), ModSounds.HAMON_SPARKS_LONG.get(), 
+	                        SoundCategory.AMBIENT, 0.75F, 1.0F);
+	            	//BlockPos blockPos = target.getBlockPos();
+	                Direction face = target.getFace();
+	            	double diameter = 2 + (double) (hamon.getHamonStrengthLevel() * 4.5) / (double) HamonData.MAX_STAT_LEVEL
+	                        * hamon.getBloodstreamEfficiency();
+	                double radiusMinus1 = (diameter - 1) / 2;
+	                AxisAlignedBB aabb = new AxisAlignedBB(blockPos).inflate(radiusMinus1).expandTowards(Vector3d.atLowerCornerOf(face.getNormal()))
+	                        .move(Vector3d.atLowerCornerOf(face.getNormal()).scale(-radiusMinus1));
+	                Random random = user.getRandom();
+	                int sparksCount = Math.max(MathHelper.floor(diameter * diameter * diameter / 8), 1);
+	                for (int i = 0; i < sparksCount; i++) {
+	                	CustomParticlesHelper.createHamonSparkParticles(null, 
+	                            aabb.minX + random.nextDouble() * (aabb.maxX - aabb.minX), 
+	                            aabb.minY + random.nextDouble() * (aabb.maxY - aabb.minY), 
+	                            aabb.minZ + random.nextDouble() * (aabb.maxZ - aabb.minZ), 
+	                            20, ModParticles.HAMON_SPARK.get());
+	                }
+            	} else if ((blockState.is(Blocks.IRON_BLOCK) 
+                		|| blockState.is(Blocks.IRON_BARS)
+                		|| blockState.is(Blocks.IRON_DOOR)
+                		|| blockState.is(Blocks.IRON_TRAPDOOR)
+                		|| blockState.is(Blocks.GOLD_BLOCK)
+                		|| blockState.is(Blocks.CHAIN)
+                		|| blockState.is(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE)
+                		|| blockState.is(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE)
+                		|| blockState.is(Blocks.NETHERITE_BLOCK)) && hamon.isSkillLearned(ModHamonSkills.METAL_SILVER_OVERDRIVE.get())) {
+            		
+            		world.playSound(ClientUtil.getClientPlayer(), user.getX(), user.getY(), user.getZ(), ModSounds.HAMON_SPARKS_LONG.get(), 
+	                        SoundCategory.AMBIENT, 0.85F, 1.2F);
+	            	//BlockPos blockPos = target.getBlockPos();
+	                Direction face = target.getFace();
+	            	double diameter = 2 + (double) (hamon.getHamonStrengthLevel() * 4.5) / (double) HamonData.MAX_STAT_LEVEL
+	                        * hamon.getBloodstreamEfficiency();
+	                double radiusMinus1 = (diameter - 1) / 2;
+	                AxisAlignedBB aabb = new AxisAlignedBB(blockPos).inflate(radiusMinus1).expandTowards(Vector3d.atLowerCornerOf(face.getNormal()))
+	                        .move(Vector3d.atLowerCornerOf(face.getNormal()).scale(-radiusMinus1));
+	                Random random = user.getRandom();
+	                int sparksCount = Math.max(MathHelper.floor(diameter * diameter * diameter / 8), 1);
+	                for (int i = 0; i < sparksCount; i++) {
+	                	CustomParticlesHelper.createHamonSparkParticles(null, 
+	                            aabb.minX + random.nextDouble() * (aabb.maxX - aabb.minX), 
+	                            aabb.minY + random.nextDouble() * (aabb.maxY - aabb.minY), 
+	                            aabb.minZ + random.nextDouble() * (aabb.maxZ - aabb.minZ), 
+	                            20, ModParticles.HAMON_SPARK_SILVER.get());
+	                }
+            	}
+            }
         }
     }
 }

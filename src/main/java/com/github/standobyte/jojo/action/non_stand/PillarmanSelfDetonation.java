@@ -35,7 +35,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 public class PillarmanSelfDetonation extends PillarmanAction {
 
     public PillarmanSelfDetonation(PillarmanAction.Builder builder) {
-        super(builder.holdType());
+        super(builder);
         mode = Mode.HEAT;
     }
     

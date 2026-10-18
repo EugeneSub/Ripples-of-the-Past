@@ -124,7 +124,7 @@ public class TrHamonParticlesPacket {
                     break;
                 case SHORT_SPARK:
                     HamonSparksLoopSound.playSparkSound(entity, msg.pos, msg.soundVolume);
-                    CustomParticlesHelper.createHamonSparkParticles(msg.followEntity ? entity : null, msg.pos.x, msg.pos.y, msg.pos.z, msg.count);
+                    CustomParticlesHelper.createHamonSparkParticles(msg.followEntity ? entity : null, msg.pos.x, msg.pos.y, msg.pos.z, msg.count, ModParticles.HAMON_SPARK.get());
                     break;
                 }
             }

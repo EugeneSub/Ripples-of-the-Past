@@ -92,7 +92,7 @@ public class ProjectileHamonChargeCap {
                 Vector3d pos = projectile.position();
                 HamonSparksLoopSound.playSparkSound(projectile, pos, chargeWearOff);
                 if (chargeWearOff == 1 || RANDOM.nextFloat() < chargeWearOff) {
-                    CustomParticlesHelper.createHamonSparkParticles(projectile, pos.x, pos.y, pos.z, 1);
+                    CustomParticlesHelper.createHamonSparkParticles(projectile, pos.x, pos.y, pos.z, 1, ModParticles.HAMON_SPARK.get());
                 }
             }
         }

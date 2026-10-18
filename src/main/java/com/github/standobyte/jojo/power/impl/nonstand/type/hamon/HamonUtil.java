@@ -586,7 +586,7 @@ public class HamonUtil {
                 ((ServerWorld) world).sendParticles(ModParticles.HAMON_SPARK.get(), x, y, z, count, 0.05, 0.05, 0.05, 0.25);
             }
             else if (clientHandled == ClientUtil.getClientPlayer()) {
-                CustomParticlesHelper.createHamonSparkParticles(null, x, y, z, count);
+                CustomParticlesHelper.createHamonSparkParticles(null, x, y, z, count, ModParticles.HAMON_SPARK.get());
             }
             if (hamonSound != null) {
                 float volume = Math.min(intensity * 2, 1.0F) * volumeMult;

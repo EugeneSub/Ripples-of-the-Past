@@ -63,9 +63,9 @@ public class PillarmanData extends TypeSpecificData {
     private static final AttributeModifier ATTACK_SPEED = new AttributeModifier(
             UUID.fromString("45f28d25-681b-44ba-96e5-b99c60582d8b"), "Pillar man attack speed", 0.15, AttributeModifier.Operation.ADDITION);
     private static final AttributeModifier MOVEMENT_SPEED = new AttributeModifier(
-            UUID.fromString("d3ac2755-e2ce-4b0d-b828-532e2c8d65fc"), "Pillar man movement speed", 0.01, AttributeModifier.Operation.ADDITION);
+            UUID.fromString("d3ac2755-e2ce-4b0d-b828-532e2c8d65fc"), "Pillar man movement speed", 0.005, AttributeModifier.Operation.ADDITION);
     private static final AttributeModifier SWIMMING_SPEED = new AttributeModifier(
-            UUID.fromString("1a7dbcb9-fc23-4fe9-8035-1d68e13b2cf4"), "Pillar man swimming speed", 0.15, AttributeModifier.Operation.ADDITION);
+            UUID.fromString("1a7dbcb9-fc23-4fe9-8035-1d68e13b2cf4"), "Pillar man swimming speed", 0.10, AttributeModifier.Operation.ADDITION);
     private static final AttributeModifier MAX_HEALTH = new AttributeModifier(
             UUID.fromString("0b6284b6-48d3-47d0-b612-e1d14f1feed5"), "Pillar man max health", 10, AttributeModifier.Operation.ADDITION);
     

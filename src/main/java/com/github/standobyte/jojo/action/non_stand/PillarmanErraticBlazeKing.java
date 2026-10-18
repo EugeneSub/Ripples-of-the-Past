@@ -12,6 +12,8 @@ import com.github.standobyte.jojo.util.general.MathUtil;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.math.vector.Vector2f;
 import net.minecraft.world.World;
 
@@ -67,6 +69,7 @@ public class PillarmanErraticBlazeKing extends PillarmanAction implements IPlaye
                         addVeinProjectile(user.level, playerPower, user, rotOffsets.x, rotOffsets.y, -0.4, -0.45, 1);
                         addVeinProjectile(user.level, playerPower, user, rotOffsets.x, rotOffsets.y, 0.425, -0.575, 1);
                     }
+                    user.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 200, 0, false, false));
                 }
                 break;
             case 40:

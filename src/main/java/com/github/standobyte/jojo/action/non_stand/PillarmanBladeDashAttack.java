@@ -170,7 +170,7 @@ public class PillarmanBladeDashAttack extends PillarmanAction implements IPlayer
        
     private static boolean dealPhysicalDamage(World world, LivingEntity user, Entity target) {
         return target.hurt(new EntityDamageSource(user instanceof PlayerEntity ? "player" : "mob", user), 
-        		DamageUtil.addArmorPiercing(VampirismClawLacerate.getDamage(world, user) + 1F, 15F, (LivingEntity) target));
+        		DamageUtil.addArmorPiercing(VampirismClawLacerate.getDamage(world, user) + 6F, 0.4F, (LivingEntity) target));
     }
     
     public static AxisAlignedBB slashHitbox(LivingEntity user) {

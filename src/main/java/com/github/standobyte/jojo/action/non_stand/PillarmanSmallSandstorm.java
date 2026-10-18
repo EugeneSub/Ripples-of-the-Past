@@ -22,10 +22,10 @@ public class PillarmanSmallSandstorm extends PillarmanAction {
         if (!world.isClientSide()) {
             PillarmanDivineSandstormEntity sandstormWave = new PillarmanDivineSandstormEntity(world, user, 0)
             		.setAtmospheric(false)
-                    .setRadius(1.5F)
-                    .setDamage(6F)
-                    .setDuration(40);
-            sandstormWave.shootFromRotation(user, 1.5F, 1F);
+                    .setRadius(0.6F)
+                    .setDamage(3F)
+                    .setDuration(30);
+            sandstormWave.shootFromRotation(user, 1.35F, 1F);
             world.addFreshEntity(sandstormWave);
             world.playSound(null, user.getX(), user.getY(), user.getZ(), ModSounds.MAGICIANS_RED_FIRE_BLAST.get(), 
                     SoundCategory.AMBIENT, 0.2F, 1.0F);

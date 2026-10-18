@@ -19,9 +19,11 @@ import com.github.standobyte.jojo.power.impl.nonstand.type.hamon.HamonData;
 import com.github.standobyte.jojo.power.impl.nonstand.type.hamon.skill.BaseHamonSkill.HamonStat;
 import com.github.standobyte.jojo.util.mc.damage.DamageUtil;
 import com.github.standobyte.jojo.util.mc.damage.KnockbackCollisionImpact;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.block.AbstractFireBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CampfireBlock;
@@ -101,7 +103,7 @@ public class HamonScarletOverdrive extends HamonSunlightYellowOverdrive {
                     	}
                 }
                 //if (target.getType() == TargetType.BLOCK) {
-            		makeLit(user.level, user);
+            		makeLit(user.level, user, playerPower);
                 //}
                 
                 break;
@@ -136,23 +138,29 @@ public class HamonScarletOverdrive extends HamonSunlightYellowOverdrive {
         }
         
         
-        protected void makeLit(World world, LivingEntity user) {
-        	RayTraceResult mouseTarget = Minecraft.getInstance().hitResult;
-        	if(mouseTarget.getType() != RayTraceResult.Type.ENTITY) {
-	        	BlockPos blockpos = ((BlockRayTraceResult) mouseTarget).getBlockPos();
+        protected void makeLit(World world, LivingEntity user, INonStandPower power) {
+        	ActionTarget mouseTarget = power.getMouseTarget();
+        	if (world.isClientSide()) {
+        		mouseTarget = ActionTarget.fromRayTraceResult(Minecraft.getInstance().hitResult);
+        	}
+        	if(mouseTarget.getType() == TargetType.BLOCK) {
+	        	BlockPos blockpos = mouseTarget.getBlockPos();
 	        	BlockState blockstate = world.getBlockState(blockpos);
-	        	BlockPos blockpos1 = blockpos.relative(((BlockRayTraceResult) mouseTarget).getDirection());
+	        	BlockPos blockpos1 = blockpos.relative(mouseTarget.getFace());
 	            
 	        	if (CampfireBlock.canLight(blockstate)) {
 	                world.setBlock(blockpos, blockstate.setValue(BlockStateProperties.LIT, Boolean.valueOf(true)), 11);
 	        	} else {
 	    	        if (AbstractFireBlock.canBePlacedAt(world, blockpos1, user == null ? Direction.NORTH : user.getDirection())) {
 	    	           BlockState blockstate1 = AbstractFireBlock.getState(world, blockpos1);
-	    	           world.setBlock(blockpos1, blockstate1, 11);
+	    	           if(!user.level.isClientSide()) {
+	    	        	   world.setBlock(blockpos1, blockstate1, 11);
+	    	           }
 	    	        }
 	        	}
-	        	if (blockstate.getBlock() == Blocks.TRIPWIRE || blockstate.getBlock() == Blocks.COBWEB) {
-	        		createScorchedCobweb(user, blockpos, blockstate, world, 32, null);
+	        	Block blockType = blockstate.getBlock();
+	        	if (blockstate.getBlock() == Blocks.TRIPWIRE || FLAMEABLE_BLOCKS.contains(blockType)) {
+	        		createScorchedCobweb(user, blockpos, blockstate, world, (int) (32 * userHamon.getHamonStrengthLevelRatio()), null);
 	        	}
         	}
         }
@@ -163,9 +171,12 @@ public class HamonScarletOverdrive extends HamonSunlightYellowOverdrive {
                 TripWireBlock.WEST, Direction.WEST, 
                 TripWireBlock.NORTH, Direction.NORTH);
         
+        private static List<Block> FLAMEABLE_BLOCKS = ImmutableList.of(Blocks.COBWEB, Blocks.GRASS, 
+        		Blocks.HAY_BLOCK, Blocks.TALL_GRASS, Blocks.DEAD_BUSH);
+        
         private static void createScorchedCobweb(LivingEntity user, BlockPos pos, BlockState blockState, World world, 
                 int range, @Nullable Direction from) {
-        	
+        		Block blockType = blockState.getBlock();
 	            if (range > 0 && blockState.getBlock() == Blocks.TRIPWIRE) {
 	                Map<Property<?>, Comparable<?>> values = blockState.getValues();
 	                List<Direction> directions = new ArrayList<Direction>();
@@ -174,44 +185,25 @@ public class HamonScarletOverdrive extends HamonSunlightYellowOverdrive {
 	                        directions.add(entry.getValue());
 	                    }
 	                }
-	                if (!user.level.isClientSide()) {
+	                //if (!user.level.isClientSide()) {
 	                	world.setBlock(pos, Blocks.FIRE.defaultBlockState(), 11);
-	                }
+	                //}
 	                for (Direction direction : directions) {
 	                    BlockPos nextPos = pos.relative(direction);
 	                    createScorchedCobweb(user, nextPos, world.getBlockState(nextPos), world, 
 	                            range - 1, direction.getOpposite());
 	                }
-	            } else if (range > 0 && blockState.getBlock() == Blocks.COBWEB) {
-	            	// I apologize for this ._.
-	            	if (!user.level.isClientSide()) {
-	            		world.setBlock(pos, Blocks.FIRE.defaultBlockState(), 11);
-	            	}
-	            	if(world.getBlockState(pos.relative(Direction.NORTH)).getBlock() == Blocks.COBWEB) {
-	            		BlockPos nextPos = pos.relative(Direction.NORTH);
-	            		createScorchedCobweb(user, nextPos, world.getBlockState(nextPos), world, 
-	                            range - 1, null);
-	            	} else if (world.getBlockState(pos.relative(Direction.SOUTH)).getBlock() == Blocks.COBWEB) {
-	            		BlockPos nextPos = pos.relative(Direction.SOUTH);
-	            		createScorchedCobweb(user, nextPos, world.getBlockState(nextPos), world, 
-	                            range - 1, null);
-	            	} else if (world.getBlockState(pos.relative(Direction.WEST)).getBlock() == Blocks.COBWEB) {
-	            		BlockPos nextPos = pos.relative(Direction.WEST);
-	            		createScorchedCobweb(user, nextPos, world.getBlockState(nextPos), world, 
-	                            range - 1, null);
-	            	} else if (world.getBlockState(pos.relative(Direction.EAST)).getBlock() == Blocks.COBWEB) {
-	            		BlockPos nextPos = pos.relative(Direction.EAST);
-	            		createScorchedCobweb(user, nextPos, world.getBlockState(nextPos), world, 
-	                            range - 1, null);
-	            	} else if (world.getBlockState(pos.relative(Direction.UP)).getBlock() == Blocks.COBWEB) {
-	            		BlockPos nextPos = pos.relative(Direction.UP);
-	            		createScorchedCobweb(user, nextPos, world.getBlockState(nextPos), world, 
-	                            range - 1, null);
-	            	} else if (world.getBlockState(pos.relative(Direction.DOWN)).getBlock() == Blocks.COBWEB) {
-	            		BlockPos nextPos = pos.relative(Direction.DOWN);
-	            		createScorchedCobweb(user, nextPos, world.getBlockState(nextPos), world, 
-	                            range - 1, null);
-	            	}
+	            } else if (range > 0 && FLAMEABLE_BLOCKS.contains(blockType)) {
+	            	//if (!user.level.isClientSide()) {
+                        world.setBlock(pos, Blocks.FIRE.defaultBlockState(), 11);
+                    //}
+	            	for (Direction direction : Direction.values()) {
+	                    BlockPos nextPos = pos.relative(direction);
+	                    BlockState nextState = world.getBlockState(pos.relative(direction));
+	                    if (FLAMEABLE_BLOCKS.contains(nextState.getBlock())) {
+	                        createScorchedCobweb(user, nextPos, nextState, world, --range, null);
+	                    }
+	                }
 	            }
         	
             if (user.level.isClientSide()) {

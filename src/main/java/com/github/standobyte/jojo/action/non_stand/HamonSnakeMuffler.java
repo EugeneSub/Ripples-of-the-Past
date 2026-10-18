@@ -35,7 +35,6 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.passive.GolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
@@ -175,7 +174,7 @@ public class HamonSnakeMuffler extends HamonAction implements IPlayerAction<Hamo
 	                if (positionWaitingTimer < 0 && (user.isOnGround() || !user.level.getFluidState(user.blockPosition()).isEmpty())
 	                        || positionWaitingTimer >= USUAL_SNAKE_MUFFLER_DURATION) {
 	                    stopAction();
-	                    playerPower.setCooldownTimer(getAction(), 60);
+	                    playerPower.setCooldownTimer(getAction(), 20);
 	                    return;
 	                }
 	                

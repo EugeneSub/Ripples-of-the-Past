@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import com.github.standobyte.jojo.client.particle.custom.CustomParticlesHelper;
 import com.github.standobyte.jojo.client.sound.HamonSparksLoopSound;
 import com.github.standobyte.jojo.entity.stand.StandEntity;
+import com.github.standobyte.jojo.init.ModParticles;
 import com.github.standobyte.jojo.modcompat.OptionalDependencyHelper;
 import com.github.standobyte.jojo.util.mc.MCUtil;
 import com.github.standobyte.jojo.util.mod.JojoModUtil;
@@ -31,13 +32,9 @@ public class HamonConfusionEffect extends StatusEffect {
     	int tick = 0;
         super.applyEffectTick(entity, amplifier);
         if (entity instanceof MobEntity && tick % 10 == 0) {
-        	for (LivingEntity target : MCUtil.entitiesAround(
-                    LivingEntity.class, entity, 9, false, entity2 -> !(entity instanceof StandEntity && entity2.is(((StandEntity) entity).getUser())))) {
-        		((MobEntity) entity).setTarget(null);
-        		((MobEntity) entity).setTarget(target);
-        		break;
-        	}
-        	tick++;
+        	
+        	MCUtil.entitiesAround(LivingEntity.class, entity, 9, false, entity2 -> 
+        	!(entity instanceof StandEntity && entity2.is(((StandEntity) entity).getUser()))).stream().findAny().ifPresent(e -> ((MobEntity) entity).setTarget(e));
         }
         if (MCUtil.isControlledThisSide(entity)) {
             Random random = entity.getRandom();
@@ -48,8 +45,9 @@ public class HamonConfusionEffect extends StatusEffect {
         
         if (entity.level.isClientSide()) {
             HamonSparksLoopSound.playSparkSound(entity, entity.getBoundingBox().getCenter(), 1.0F, true);
-            CustomParticlesHelper.createHamonSparkParticles(entity, entity.getRandomX(0.5), entity.getY(Math.random()), entity.getRandomZ(0.5), 1);
+            CustomParticlesHelper.createHamonSparkParticles(entity, entity.getRandomX(0.5), entity.getY(Math.random()), entity.getRandomZ(0.5), 1, ModParticles.HAMON_SPARK.get());
         }
+        tick++;
     }
     
     @Override

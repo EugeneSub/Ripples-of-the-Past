@@ -65,14 +65,14 @@ public class HamonConfusion extends HamonAction implements IPlayerAction<HamonCo
         @Override
         public void playerTick() {
             switch (getTick()) {
-            case 5:
+            case 3:
                 if (user.level.isClientSide()) {
                     user.level.playSound(ClientUtil.getClientPlayer(), user.getX(), user.getEyeY(), user.getZ(), 
                             ModSounds.HAMON_SYO_SWING.get(), user.getSoundSource(), 1.0f, 1.0f);
                     user.swing(Hand.MAIN_HAND, true);
                 }
                 break;
-            case 10:
+            case 7:
                 if (!user.level.isClientSide()) {
                     ActionTarget target = playerPower.getMouseTarget();
                     if (target.getEntity() instanceof LivingEntity) {
@@ -80,7 +80,7 @@ public class HamonConfusion extends HamonAction implements IPlayerAction<HamonCo
                     }
                 }
                 break;
-            case 15:
+            case 12:
                 stopAction();
                 break;
             }

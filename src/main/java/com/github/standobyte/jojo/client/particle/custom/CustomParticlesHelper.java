@@ -149,16 +149,16 @@ public abstract class CustomParticlesHelper {
         addParticle(particleRight, particleRight.getPos(), false, false);
     }
     
-    public static void createHamonSparkParticles(@Nullable Entity entityToFollow, Vector3d pos, int particlesCount) {
-        createHamonSparkParticles(entityToFollow, pos.x, pos.y, pos.z, particlesCount);
+    public static void createHamonSparkParticles(@Nullable Entity entityToFollow, Vector3d pos, int particlesCount, IParticleData particles) {
+        createHamonSparkParticles(entityToFollow, pos.x, pos.y, pos.z, particlesCount, particles);
     }
     
     private static final Random RANDOM = new Random();
     private static final double SPARK_PARTICLE_DIST = 0.05;
     private static final double SPARK_PARTICLE_SPEED = 0.25;
-    public static void createHamonSparkParticles(@Nullable Entity entityToFollow, double x, double y, double z, int particlesCount) {
+    public static void createHamonSparkParticles(@Nullable Entity entityToFollow, double x, double y, double z, int particlesCount, IParticleData particles) {
         Minecraft mc = Minecraft.getInstance();
-        IParticleData particleData = ModParticles.HAMON_SPARK.get();
+        IParticleData particleData = particles;
         for (int i = 0; i < particlesCount; ++i) {
             double xOffset = RANDOM.nextGaussian() * SPARK_PARTICLE_DIST;
             double yOffset = RANDOM.nextGaussian() * SPARK_PARTICLE_DIST;
@@ -176,6 +176,10 @@ public abstract class CustomParticlesHelper {
                 CustomParticlesHelper.addParticle(particle, new Vector3d(x, y, z), particleData.getType().getOverrideLimiter(), false);
             }
         }
+    }
+    
+    public static void createHamonSparkParticles(@Nullable Entity entityToFollow, Vector3d pos, int particlesCount) {
+        createHamonSparkParticles(entityToFollow, pos.x, pos.y, pos.z, particlesCount, ModParticles.HAMON_SPARK.get());
     }
     
     // FIXME use chariot's armor layer if it is on

@@ -81,14 +81,14 @@ public class HamonAfterimage extends HamonAction implements IPlayerAction<HamonA
 	            });
             	Vector3d move = Vector3d.directionFromRotation(user.xRot, user.yRot)
                         .scale(1 + user.getAttributeValue(Attributes.MOVEMENT_SPEED) * 5);
-                user.setDeltaMovement(move.x * 3, move.y * 0.1, move.z * 3);
+                user.setDeltaMovement(move.x * 2, move.y * 0.1, move.z * 2);
                 break;
             case 5:
                 if (!user.level.isClientSide()) {
                     
                 }
                 break;
-            case 12:
+            case 10:
             	if(isShift) {
             		user.teleportTo(originalPos.getX(), originalPos.getY(), originalPos.getZ());	
             	}

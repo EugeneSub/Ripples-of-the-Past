@@ -19,7 +19,7 @@ public class PillarmanHornAttack extends PillarmanAction {
     protected void perform(World world, LivingEntity user, INonStandPower power, ActionTarget target) {
         if (!world.isClientSide()) {
             PillarmanHornEntity pillarmanHorn = new PillarmanHornEntity(world, user);
-            pillarmanHorn.setLifeSpan(40);
+            pillarmanHorn.setLifeSpan(25);
             world.addFreshEntity(pillarmanHorn);
         }
     }

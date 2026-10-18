@@ -14,6 +14,7 @@ import com.github.standobyte.jojo.client.particle.custom.CustomParticlesHelper;
 import com.github.standobyte.jojo.client.sound.ClientTickingSoundsHelper;
 import com.github.standobyte.jojo.client.sound.HamonSparksLoopSound;
 import com.github.standobyte.jojo.init.ModEntityTypes;
+import com.github.standobyte.jojo.init.ModParticles;
 import com.github.standobyte.jojo.init.power.non_stand.ModPowers;
 import com.github.standobyte.jojo.network.PacketManager;
 import com.github.standobyte.jojo.network.packets.fromclient.ClLeavesGliderColorPacket;
@@ -141,7 +142,7 @@ public class LeavesGliderEntity extends Entity implements IEntityAdditionalSpawn
                 if (isBeingCharged || random.nextFloat() < energyRatio * 0.2F) {
                     HamonSparksLoopSound.playSparkSound(this, soundPos, energyRatio);
                     CustomParticlesHelper.createHamonSparkParticles(this, this.getRandomX(0.5F), this.getY(1.0F), this.getRandomZ(0.5F), 
-                            MathUtil.fractionRandomInc(energyRatio * 2));
+                            MathUtil.fractionRandomInc(energyRatio * 2), ModParticles.HAMON_SPARK.get());
                 }
             }
             

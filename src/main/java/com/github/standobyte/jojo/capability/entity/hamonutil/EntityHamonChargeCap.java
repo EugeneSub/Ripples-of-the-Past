@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import com.github.standobyte.jojo.client.particle.custom.CustomParticlesHelper;
 import com.github.standobyte.jojo.client.sound.HamonSparksLoopSound;
+import com.github.standobyte.jojo.init.ModParticles;
 import com.github.standobyte.jojo.network.PacketManager;
 import com.github.standobyte.jojo.network.packets.fromserver.TrHamonEntityChargePacket;
 import com.github.standobyte.jojo.power.impl.nonstand.type.hamon.HamonCharge;
@@ -38,7 +39,7 @@ public class EntityHamonChargeCap {
         
         else if (clHasCharge) {
             HamonSparksLoopSound.playSparkSound(entity, entity.getBoundingBox().getCenter(), 1.0F, true);
-            CustomParticlesHelper.createHamonSparkParticles(entity, entity.getRandomX(0.5), entity.getY(Math.random()), entity.getRandomZ(0.5), 1);
+            CustomParticlesHelper.createHamonSparkParticles(entity, entity.getRandomX(0.5), entity.getY(Math.random()), entity.getRandomZ(0.5), 1, ModParticles.HAMON_SPARK.get());
         }
     }
     

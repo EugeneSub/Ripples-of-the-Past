@@ -178,7 +178,7 @@ public class HamonSendoOverdriveEntity extends Entity implements IEntityAddition
                             && target.getCapability(LivingUtilCapProvider.CAPABILITY).map(
                                     cap -> cap.tryHurtFromSendoOverdrive(entity, WAVE_ADD_TICK)).orElse(true)
                             && DamageUtil.dealHamonDamage(target, entity.damage, entity, entity.getUser(), 
-                            		attack -> attack.hamonParticle(ModParticles.HAMON_SPARK_SILVER.get()))) {
+                            		attack -> attack.hamonParticle(ModParticles.HAMON_SPARK.get()))) {
                         entity.givePointsToUser();
                     }
                     hitEntities.add(target);
@@ -330,7 +330,7 @@ public class HamonSendoOverdriveEntity extends Entity implements IEntityAddition
                     break;
                 }
                 particleVec = particleVec.scale(radius / WAVE_TICK_LENGTH);
-                CustomParticlesHelper.addSendoHamonOverdriveParticle(level, ModParticles.HAMON_SPARK_SILVER.get(), axis, 
+                CustomParticlesHelper.addSendoHamonOverdriveParticle(level, ModParticles.HAMON_SPARK.get(), axis, 
                         center.x, center.y, center.z, particleVec.x, particleVec.y, particleVec.z, WAVE_TICK_LENGTH);
             }
         }

@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 public class PillarmanGiantCarthwheelPrison extends PillarmanAction {
 
     public PillarmanGiantCarthwheelPrison(PillarmanAction.Builder builder) {
-        super(builder.holdType());
+        super(builder);
         mode = Mode.HEAT;
     }
     

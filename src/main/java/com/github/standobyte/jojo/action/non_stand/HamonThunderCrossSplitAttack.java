@@ -183,7 +183,9 @@ public class HamonThunderCrossSplitAttack extends HamonAction implements IPlayer
 	            }
             }
             else {
-                HamonSparksLoopSound.playSparkSound(user, new Vector3d(user.getX(), user.getY(0.25), user.getZ()), 1.0F, true);
+            	if(user.level.isClientSide()) {
+            		HamonSparksLoopSound.playSparkSound(user, new Vector3d(user.getX(), user.getY(0.25), user.getZ()), 1.0F, true);
+            	}
             }
             
             user.fallDistance = 0;

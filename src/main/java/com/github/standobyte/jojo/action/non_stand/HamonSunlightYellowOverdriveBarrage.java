@@ -218,7 +218,7 @@ public class HamonSunlightYellowOverdriveBarrage extends HamonAction implements 
                             targetEntity.invulnerableTime = invulTicks;
                         }
                         if (!world.isClientSide()) {
-                            DamageUtil.dealHamonDamage(targetEntity, 0.1F, user, null, 
+                            DamageUtil.dealHamonDamage(targetEntity, 0.01F, user, null, 
                                     attack -> attack.hamonParticle(ModParticles.HAMON_SPARK_YELLOW.get()));
                             if (targetEntity.getHealth() < 2) {
                                 startFinishingPunch();

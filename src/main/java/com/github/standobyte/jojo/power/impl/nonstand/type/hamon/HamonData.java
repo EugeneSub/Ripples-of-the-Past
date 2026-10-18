@@ -1668,7 +1668,7 @@ public class HamonData extends TypeSpecificData {
             HamonSparksLoopSound.playSparkSound(user, user.getBoundingBox().getCenter(), 1.0F, 1);
             CustomParticlesHelper.createHamonSparkParticles(user, 
                     user.getRandomX(0.5), user.getRandomY(), user.getRandomZ(0.5), 
-                    (int) (MathUtil.fractionRandomInc(1) * 2));
+                    (int) (MathUtil.fractionRandomInc(1) * 2), ModParticles.HAMON_SPARK.get());
         }
     }
     
@@ -1686,7 +1686,7 @@ public class HamonData extends TypeSpecificData {
         else {
             if (!waterWalkingPrevTick && waterWalkingThisTick || clLargeSpark) {
                 HamonUtil.emitHamonSparkParticles(user.level, ClientUtil.getClientPlayer(), user.position(), 0.05F);
-                CustomParticlesHelper.createHamonSparkParticles(null, user.position(), 10);
+                CustomParticlesHelper.createHamonSparkParticles(null, user.position(), 10, ModParticles.HAMON_SPARK.get());
                 clTickSpark = false;
                 clLargeSpark = false;
             }
@@ -1697,7 +1697,7 @@ public class HamonData extends TypeSpecificData {
             HamonSparksLoopSound.playSparkSound(user, user.position(), 1.0F);
             CustomParticlesHelper.createHamonSparkParticles(user, 
                     user.getRandomX(0.5), user.getY(Math.random() * 0.1), user.getRandomZ(0.5), 
-                    1);
+                    1, ModParticles.HAMON_SPARK.get());
         }
         clTickSpark = true;
     }

@@ -7,6 +7,7 @@ import com.github.standobyte.jojo.capability.entity.LivingUtilCapProvider;
 import com.github.standobyte.jojo.client.particle.custom.CustomParticlesHelper;
 import com.github.standobyte.jojo.client.sound.HamonSparksLoopSound;
 import com.github.standobyte.jojo.init.ModEntityTypes;
+import com.github.standobyte.jojo.init.ModParticles;
 import com.github.standobyte.jojo.init.power.non_stand.ModPowers;
 import com.github.standobyte.jojo.init.power.non_stand.hamon.ModHamonActions;
 import com.github.standobyte.jojo.init.power.non_stand.hamon.ModHamonSkills;
@@ -203,7 +204,7 @@ public class ZoomPunchEntity extends OwnerBoundProjectileEntity {
         super.tick();
         if (level.isClientSide()) {
             HamonSparksLoopSound.playSparkSound(this, position(), 0.25F);
-            CustomParticlesHelper.createHamonSparkParticles(this, position(), 1);
+            CustomParticlesHelper.createHamonSparkParticles(this, position(), 1, ModParticles.HAMON_SPARK.get());
         }
     }
     

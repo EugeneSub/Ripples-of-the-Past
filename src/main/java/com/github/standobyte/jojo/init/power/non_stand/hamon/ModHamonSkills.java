@@ -192,17 +192,10 @@ public class ModHamonSkills {
             //.requiredSkill(DETECTOR)
             .build());
     
-    public static final RegistryObject<BaseHamonSkill> HAMON_CONFUSION = HAMON_SKILLS.register("hamon_confusion", 
-            () -> new BaseHamonSkill.Builder(HamonStat.CONTROL, RewardType.ATTACK)
-            .unlocks(ModHamonActions.HAMON_CONFUSION)
-            .skillBranch(SkillBranch.BODY_MANIPULATION)
-            .requiredSkill(HYPNOSIS)
-            .build());
-    
     public static final RegistryObject<BaseHamonSkill> HAMON_SPREAD = HAMON_SKILLS.register("hamon_spread", 
             () -> new BaseHamonSkill.Builder(HamonStat.CONTROL, RewardType.PASSIVE)
             .skillBranch(SkillBranch.BODY_MANIPULATION)
-            .requiredSkill(HYPNOSIS).requiredSkill(HAMON_CONFUSION)
+            .requiredSkill(HYPNOSIS).requiredSkill(HAMON_SHOCK)
             .build());
     
     
@@ -391,9 +384,16 @@ public class ModHamonSkills {
             .requiredSkill(SUNLIGHT_YELLOW_OVERDRIVE).requiredSkill(JUMP)
             .build());
     
+    public static final RegistryObject<CharacterTechniqueHamonSkill> HAMON_CONFUSION = HAMON_SKILLS.register("hamon_confusion", 
+            () -> new CharacterTechniqueHamonSkill.Builder(RewardType.ATTACK)
+            .unlocks(ModHamonActions.HAMON_CONFUSION)
+            .requiredSkill(HYPNOSIS)
+            .build());
+    
     public static final RegistryObject<CharacterHamonTechnique> CHARACTER_UNKNOWN = HAMON_CHARACTER_TECHNIQUES.register("warrior", 
             () -> new CharacterHamonTechnique.Builder("warrior", Util.make(new ArrayList<>(), list -> {
-                list.add(ModHamonSkills.THUNDER_CROSS_SPLIT_ATTACK);
+            	list.add(ModHamonSkills.HAMON_CONFUSION);
+            	list.add(ModHamonSkills.THUNDER_CROSS_SPLIT_ATTACK);
             }))
             .baseSkillBranchEfficiency(SkillBranch.OVERDRIVE, 0.1f)
             .baseSkillBranchEfficiency(SkillBranch.INFUSION, 0.1f)

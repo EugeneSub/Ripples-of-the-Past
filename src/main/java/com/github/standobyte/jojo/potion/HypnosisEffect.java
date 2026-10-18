@@ -3,6 +3,7 @@ package com.github.standobyte.jojo.potion;
 import com.github.standobyte.jojo.capability.entity.LivingUtilCapProvider;
 import com.github.standobyte.jojo.client.particle.custom.CustomParticlesHelper;
 import com.github.standobyte.jojo.client.sound.HamonSparksLoopSound;
+import com.github.standobyte.jojo.init.ModParticles;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierManager;
@@ -29,7 +30,7 @@ public class HypnosisEffect extends StatusEffect {
     public void applyEffectTick(LivingEntity entity, int amplifier) {
         if (entity.level.isClientSide() && entity.getRandom().nextFloat() < 0.05F) {
             HamonSparksLoopSound.playSparkSound(entity, entity.getBoundingBox().getCenter(), 1.0F, true);
-            CustomParticlesHelper.createHamonSparkParticles(entity, entity.getRandomX(0.5), entity.getY(Math.random()), entity.getRandomZ(0.5), 1);
+            CustomParticlesHelper.createHamonSparkParticles(entity, entity.getRandomX(0.5), entity.getY(Math.random()), entity.getRandomZ(0.5), 1, ModParticles.HAMON_SPARK.get());
         }
     }
     

@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.github.standobyte.jojo.client.particle.custom.CustomParticlesHelper;
 import com.github.standobyte.jojo.client.sound.HamonSparksLoopSound;
+import com.github.standobyte.jojo.init.ModParticles;
 import com.github.standobyte.jojo.util.mc.MCUtil;
 
 import net.minecraft.entity.LivingEntity;
@@ -27,7 +28,7 @@ public class HamonShockEffect extends StunEffect {
         
         if (entity.level.isClientSide()) {
             HamonSparksLoopSound.playSparkSound(entity, entity.getBoundingBox().getCenter(), 1.0F, true);
-            CustomParticlesHelper.createHamonSparkParticles(entity, entity.getRandomX(0.5), entity.getY(Math.random()), entity.getRandomZ(0.5), 1);
+            CustomParticlesHelper.createHamonSparkParticles(entity, entity.getRandomX(0.5), entity.getY(Math.random()), entity.getRandomZ(0.5), 1, ModParticles.HAMON_SPARK.get());
         }
     }
 }

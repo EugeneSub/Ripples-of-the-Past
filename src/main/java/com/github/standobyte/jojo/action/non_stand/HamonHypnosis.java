@@ -8,6 +8,7 @@ import com.github.standobyte.jojo.capability.entity.LivingUtilCap.HypnosisTarget
 import com.github.standobyte.jojo.capability.entity.LivingUtilCapProvider;
 import com.github.standobyte.jojo.client.particle.custom.CustomParticlesHelper;
 import com.github.standobyte.jojo.client.sound.HamonSparksLoopSound;
+import com.github.standobyte.jojo.init.ModParticles;
 import com.github.standobyte.jojo.init.power.non_stand.ModPowers;
 import com.github.standobyte.jojo.potion.HypnosisEffect;
 import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
@@ -61,7 +62,7 @@ public class HamonHypnosis extends HamonAction {
                 Vector3d targetPos = user.getEyePosition(1.0F).add(user.getLookAngle().scale(distanceToTarget));
                 Vector3d particlesPos = userPos.add(targetPos.subtract(userPos).scale(0.5));
                 HamonSparksLoopSound.playSparkSound(user, particlesPos, 1.0F, true);
-                CustomParticlesHelper.createHamonSparkParticles(null, particlesPos, 1);
+                CustomParticlesHelper.createHamonSparkParticles(null, particlesPos, 1, ModParticles.HAMON_SPARK.get());
             }
         }
     }
