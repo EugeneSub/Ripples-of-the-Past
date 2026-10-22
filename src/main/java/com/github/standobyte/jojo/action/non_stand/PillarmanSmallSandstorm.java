@@ -23,7 +23,7 @@ public class PillarmanSmallSandstorm extends PillarmanAction {
             PillarmanDivineSandstormEntity sandstormWave = new PillarmanDivineSandstormEntity(world, user, 0)
             		.setAtmospheric(false)
                     .setRadius(0.6F)
-                    .setDamage(3F)
+                    .setDamage(1F)
                     .setDuration(30);
             sandstormWave.shootFromRotation(user, 1.35F, 1F);
             world.addFreshEntity(sandstormWave);

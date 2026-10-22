@@ -19,6 +19,7 @@ import com.github.standobyte.jojo.power.impl.nonstand.type.hamon.HamonData;
 import com.github.standobyte.jojo.power.impl.nonstand.type.hamon.skill.BaseHamonSkill.HamonStat;
 import com.github.standobyte.jojo.util.mc.damage.DamageUtil;
 import com.github.standobyte.jojo.util.mc.damage.KnockbackCollisionImpact;
+import com.github.standobyte.jojo.util.mod.JojoModUtil;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
@@ -36,6 +37,7 @@ import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.Property;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
+import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -44,6 +46,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeMod;
 
 public class HamonScarletOverdrive extends HamonSunlightYellowOverdrive {
     
@@ -90,11 +93,14 @@ public class HamonScarletOverdrive extends HamonSunlightYellowOverdrive {
                         playerPower.consumeEnergy(250F);
                     }
                 } else {
-                	RayTraceResult mouseTarget = Minecraft.getInstance().hitResult;
+                	//RayTraceResult mouseTarget = Minecraft.getInstance().hitResult;
+                	double reachDistance = user.getAttributeValue(ForgeMod.REACH_DISTANCE.get());
+                	RayTraceResult result = JojoModUtil.rayTrace(user, reachDistance, EntityPredicates.NO_SPECTATORS);
+                	Vector3d position = result.getLocation();
                 	user.level.playSound(ClientUtil.getClientPlayer(), user.getX(), user.getEyeY(), user.getZ(), 
                     		SoundEvents.BLAZE_SHOOT, user.getSoundSource(), 2.0f, 1.0f);
                 	for (int i = 0; i < 30; i++) {
-                    	Vector3d particlePos = mouseTarget.getLocation().add(
+                    	Vector3d particlePos = position.add(
                     	    	(Math.random() - 0.5) * user.getBbWidth(), 
                     	         Math.random(), 
                     	        (Math.random() - 0.5) * user.getBbWidth());
@@ -139,28 +145,30 @@ public class HamonScarletOverdrive extends HamonSunlightYellowOverdrive {
         
         
         protected void makeLit(World world, LivingEntity user, INonStandPower power) {
-        	ActionTarget mouseTarget = power.getMouseTarget();
-        	if (world.isClientSide()) {
-        		mouseTarget = ActionTarget.fromRayTraceResult(Minecraft.getInstance().hitResult);
-        	}
-        	if(mouseTarget.getType() == TargetType.BLOCK) {
-	        	BlockPos blockpos = mouseTarget.getBlockPos();
-	        	BlockState blockstate = world.getBlockState(blockpos);
-	        	BlockPos blockpos1 = blockpos.relative(mouseTarget.getFace());
-	            
-	        	if (CampfireBlock.canLight(blockstate)) {
-	                world.setBlock(blockpos, blockstate.setValue(BlockStateProperties.LIT, Boolean.valueOf(true)), 11);
-	        	} else {
-	    	        if (AbstractFireBlock.canBePlacedAt(world, blockpos1, user == null ? Direction.NORTH : user.getDirection())) {
-	    	           BlockState blockstate1 = AbstractFireBlock.getState(world, blockpos1);
-	    	           if(!user.level.isClientSide()) {
-	    	        	   world.setBlock(blockpos1, blockstate1, 11);
-	    	           }
-	    	        }
-	        	}
-	        	Block blockType = blockstate.getBlock();
-	        	if (blockstate.getBlock() == Blocks.TRIPWIRE || FLAMEABLE_BLOCKS.contains(blockType)) {
-	        		createScorchedCobweb(user, blockpos, blockstate, world, (int) (32 * userHamon.getHamonStrengthLevelRatio()), null);
+        	ActionTarget mouseTarget = playerPower.getMouseTarget();
+        	//if (world.isClientSide()) {
+        		//mouseTarget = ActionTarget.fromRayTraceResult(Minecraft.getInstance().hitResult);
+        	//}
+        	if (!world.isClientSide()) {
+	        	if(mouseTarget.getType() == TargetType.BLOCK) {
+		        	BlockPos blockpos = mouseTarget.getBlockPos();
+		        	BlockState blockstate = world.getBlockState(blockpos);
+		        	BlockPos blockpos1 = blockpos.relative(mouseTarget.getFace());
+		            
+		        	if (CampfireBlock.canLight(blockstate)) {
+		                world.setBlock(blockpos, blockstate.setValue(BlockStateProperties.LIT, Boolean.valueOf(true)), 11);
+		        	} else {
+		    	        if (AbstractFireBlock.canBePlacedAt(world, blockpos1, user == null ? Direction.NORTH : user.getDirection())) {
+		    	           BlockState blockstate1 = AbstractFireBlock.getState(world, blockpos1);
+		    	           //if(!user.level.isClientSide()) {
+		    	        	   world.setBlock(blockpos1, blockstate1, 11);
+		    	           //}
+		    	        }
+		        	}
+		        	Block blockType = blockstate.getBlock();
+		        	if (blockstate.getBlock() == Blocks.TRIPWIRE || FLAMEABLE_BLOCKS.contains(blockType)) {
+		        		createScorchedCobweb(user, blockpos, blockstate, world, (int) (32 * userHamon.getHamonStrengthLevelRatio()), null);
+		        	}
 	        	}
         	}
         }

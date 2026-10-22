@@ -1,23 +1,18 @@
 package com.github.standobyte.jojo.potion;
 
 import java.util.Random;
-import java.util.Map.Entry;
 
 import com.github.standobyte.jojo.client.particle.custom.CustomParticlesHelper;
 import com.github.standobyte.jojo.client.sound.HamonSparksLoopSound;
 import com.github.standobyte.jojo.entity.stand.StandEntity;
 import com.github.standobyte.jojo.init.ModParticles;
-import com.github.standobyte.jojo.modcompat.OptionalDependencyHelper;
 import com.github.standobyte.jojo.util.mc.MCUtil;
-import com.github.standobyte.jojo.util.mod.JojoModUtil;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierManager;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.potion.EffectType;
 
 public class HamonConfusionEffect extends StatusEffect {

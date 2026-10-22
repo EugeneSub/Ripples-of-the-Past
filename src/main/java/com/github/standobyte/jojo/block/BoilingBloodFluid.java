@@ -22,6 +22,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidAttributes;
 
@@ -150,30 +151,30 @@ public abstract class BoilingBloodFluid extends LavaFluid {
         return pFluid == ModFluids.BOILING_BLOOD.get() || pFluid == ModFluids.FLOWING_BOILING_BLOOD.get();
     }
 //
-//    @Override
-//    public int getDropOff(IWorldReader pLevel) {
-//        return pLevel.dimensionType().ultraWarm() ? 1 : 2;
-//    }
+    @Override
+    public int getDropOff(IWorldReader pLevel) {
+        return pLevel.dimensionType().ultraWarm() ? 2 : 4;
+    }
 //
 //    @Override
 //    public boolean canBeReplacedWith(FluidState pFluidState, IBlockReader pBlockReader, BlockPos pPos, Fluid pFluid, Direction pDirection) {
 //        return pFluidState.getHeight(pBlockReader, pPos) >= 0.44444445F && pFluid.is(FluidTags.WATER);
 //    }
 //
-//    @Override
-//    public int getTickDelay(IWorldReader world) {
-//       return world.dimensionType().ultraWarm() ? 10 : 30;
-//    }
+    @Override
+    public int getTickDelay(IWorldReader world) {
+       return world.dimensionType().ultraWarm() ? 3 : 5;
+    }
 //
-//    @Override
-//    public int getSpreadDelay(World world, BlockPos pos, FluidState fluidState, FluidState newLiquid) {
-//        int i = this.getTickDelay(world);
+    @Override
+    public int getSpreadDelay(World world, BlockPos pos, FluidState fluidState, FluidState newLiquid) {
+        int i = this.getTickDelay(world);
 //        if (!fluidState.isEmpty() && !newLiquid.isEmpty() && !fluidState.getValue(FALLING) && !newLiquid.getValue(FALLING) && newLiquid.getHeight(world, pos) > fluidState.getHeight(world, pos) && world.getRandom().nextInt(4) != 0) {
 //            i *= 4;
 //        }
-//
-//        return i;
-//    }
+
+        return i;
+    }
 
     private void fizz(IWorld pLevel, BlockPos pPos) {
         pLevel.levelEvent(1501, pPos, 0);

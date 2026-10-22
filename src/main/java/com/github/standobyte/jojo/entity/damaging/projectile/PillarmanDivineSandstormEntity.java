@@ -202,7 +202,7 @@ public class PillarmanDivineSandstormEntity extends ModdedProjectileEntity {
     
     @Override
     protected float getDamageAmount() {
-        return damage * Math.max(damageWearOffMultiplier(), 0.5F);
+        return damage * Math.max(damageWearOffMultiplier(), 0.2F);
     }
     
     private float damageWearOffMultiplier() {

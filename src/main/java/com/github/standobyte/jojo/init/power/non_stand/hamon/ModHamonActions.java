@@ -105,7 +105,7 @@ public class ModHamonActions {
                     .shout(ModHamonSkills.CHARACTER_LISA_LISA, ModSounds.BREATH_LISA_LISA)));
     
     public static final RegistryObject<HamonAction> HAMON_HEALING = ACTIONS.register("hamon_healing", 
-            () -> new HamonHealing(new HamonAction.Builder().holdToFire(65, false).energyCost(350f).heldWalkSpeed(0f)
+            () -> new HamonHealing(new HamonAction.Builder().holdToFire(60, false).energyCost(300f).heldWalkSpeed(0f)
                     .needsFreeMainHand().swingHand()));
     
     public static final RegistryObject<HamonWallClimbing2> HAMON_WALL_CLIMBING = ACTIONS.register("hamon_wall_climbing", 

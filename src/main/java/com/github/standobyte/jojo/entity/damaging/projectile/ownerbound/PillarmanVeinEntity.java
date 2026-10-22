@@ -99,7 +99,7 @@ public class PillarmanVeinEntity extends OwnerBoundProjectileEntity {
                 setIsRetracting(true);
                 if(!level.isClientSide()) {
 	                //if (level.isEmptyBlock(target.blockPosition())) {
-	                    level.setBlockAndUpdate(target.blockPosition(), ModBlocks.BOILING_BLOOD.get().defaultBlockState().setValue(FlowingFluidBlock.LEVEL, 6));
+	                    level.setBlockAndUpdate(target.blockPosition(), ModBlocks.BOILING_BLOOD.get().defaultBlockState().setValue(FlowingFluidBlock.LEVEL, 7));
 	                    Vector3d center = getBoundingBox().getCenter();
 	                    level.playSound(null, center.x, center.y, center.z, SoundEvents.LAVA_EXTINGUISH, 
 	                            SoundCategory.AMBIENT, 0.2F, 1.0F);
@@ -118,7 +118,7 @@ public class PillarmanVeinEntity extends OwnerBoundProjectileEntity {
                 		blockState.getCollisionShape(level, blockPos) != VoxelShapes.empty()) {
                     blockPos = blockPos.relative(blockRayTraceResult.getDirection());
                     if (level.isEmptyBlock(blockPos) && !isRetracting()) {
-                        level.setBlockAndUpdate(blockPos, ModBlocks.BOILING_BLOOD.get().defaultBlockState().setValue(FlowingFluidBlock.LEVEL, 4));
+                        level.setBlockAndUpdate(blockPos, ModBlocks.BOILING_BLOOD.get().defaultBlockState().setValue(FlowingFluidBlock.LEVEL, 7));
                         Vector3d center = getBoundingBox().getCenter();
                         level.playSound(null, center.x, center.y, center.z, SoundEvents.LAVA_EXTINGUISH, 
                                 SoundCategory.AMBIENT, 0.2F, 1.0F);

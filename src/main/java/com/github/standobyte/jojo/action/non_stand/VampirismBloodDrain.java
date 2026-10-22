@@ -104,7 +104,7 @@ public class VampirismBloodDrain extends VampirismAction {
                         bloodAndHealModifier *= 1 - Math.min((freeze.getAmplifier() + 1) * 0.2F, 1);
                     }
                     if (drainBlood(user, targetEntity, 2)) {
-                        power.addEnergy(bloodAndHealModifier);
+                        power.addEnergy(bloodAndHealModifier * 10F);
                         if (power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).map(
                                 vampirism -> vampirism.isBeingCured() && vampirism.getCuringStage() >= 3).orElse(false)) {
                             user.hurt(new DamageSource("curedVampireBlood"), Math.min(bloodAndHealModifier * 0.5F, user.getHealth() - 1));

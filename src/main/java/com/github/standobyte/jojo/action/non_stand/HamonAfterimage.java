@@ -79,9 +79,17 @@ public class HamonAfterimage extends HamonAction implements IPlayerAction<HamonA
             	user.getCapability(LivingUtilCapProvider.CAPABILITY).ifPresent(cap -> {
 	                cap.addAfterimages(6, 10);
 	            });
-            	Vector3d move = Vector3d.directionFromRotation(user.xRot, user.yRot)
+            	Vector3d direction = new Vector3d(user.xxa, 0, user.zza);
+            	if (direction.lengthSqr() < 0.01) {
+            		direction = Vector3d.directionFromRotation(user.xRot, user.yRot);
+            	} else {
+            		direction = direction.yRot(-user.yRot * ((float)Math.PI / 180F)).normalize();
+            	}
+            	Vector3d move = direction.scale(1 + user.getAttributeValue(Attributes.MOVEMENT_SPEED) * 5);
+            	user.setDeltaMovement(move.x * 2, move.y * 0.1, move.z * 2);
+            	/*Vector3d move = Vector3d.directionFromRotation(user.xRot, user.yRot)
                         .scale(1 + user.getAttributeValue(Attributes.MOVEMENT_SPEED) * 5);
-                user.setDeltaMovement(move.x * 2, move.y * 0.1, move.z * 2);
+                user.setDeltaMovement(move.x * 2, move.y * 0.1, move.z * 2);*/
                 break;
             case 5:
                 if (!user.level.isClientSide()) {

@@ -59,8 +59,8 @@ public class PillarmanAtmosphericRift extends PillarmanDivineSandstorm {
                 PillarmanDivineSandstormEntity sanstormWave = new PillarmanDivineSandstormEntity(world, user, 0)
                 		.setAtmospheric(true)
                         .setRadius(0.5F)
-                        .setDamage(4F)
-                        .setDuration(60);
+                        .setDamage(1F)
+                        .setDuration(40);
                 sanstormWave.shootFromRotation(user, 1.75F, 1F);
                 world.addFreshEntity(sanstormWave);
                 world.playSound(null, user.getX(), user.getY(), user.getZ(), ModSounds.MAGICIANS_RED_FIRE_BLAST.get(), 

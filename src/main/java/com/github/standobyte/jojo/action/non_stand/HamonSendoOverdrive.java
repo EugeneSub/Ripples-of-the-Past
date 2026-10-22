@@ -165,7 +165,7 @@ public class HamonSendoOverdrive extends HamonAction {
                 float hamonControl = hamon.getHamonControlLevelRatio();
                 
                 if(user.isCrouching()) {
-                    double diameter = 2 + (double) (hamon.getHamonStrengthLevel() * 4.5) / (double) HamonData.MAX_STAT_LEVEL
+                    double diameter = 2 + (double) (hamon.getHamonStrengthLevel() * 6.5) / (double) HamonData.MAX_STAT_LEVEL
                             * hamon.getBloodstreamEfficiency();
                     double radiusMinus1 = (diameter - 1) / 2;
                     AxisAlignedBB aabb = new AxisAlignedBB(blockPos).inflate(radiusMinus1).expandTowards(Vector3d.atLowerCornerOf(face.getNormal()))
@@ -205,7 +205,7 @@ public class HamonSendoOverdrive extends HamonAction {
                 	sendoOverdrive.setBlockTarget(target.getBlockPos(), target.getFace());
                 	world.addFreshEntity(sendoOverdrive);*/
                 	
-                	double diameter = 2 + (double) (hamon.getHamonStrengthLevel() * 6.5) / (double) HamonData.MAX_STAT_LEVEL
+                	double diameter = 2 + (double) (hamon.getHamonStrengthLevel() * 9.0) / (double) HamonData.MAX_STAT_LEVEL
                             * hamon.getBloodstreamEfficiency();
                     double radiusMinus1 = (diameter - 1) / 2;
                     AxisAlignedBB aabb = new AxisAlignedBB(blockPos).inflate(radiusMinus1).expandTowards(Vector3d.atLowerCornerOf(face.getNormal()))
