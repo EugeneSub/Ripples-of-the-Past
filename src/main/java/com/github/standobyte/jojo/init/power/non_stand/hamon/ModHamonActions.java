@@ -14,6 +14,7 @@ import com.github.standobyte.jojo.action.non_stand.HamonCrimsonBubble;
 import com.github.standobyte.jojo.action.non_stand.HamonCutter;
 import com.github.standobyte.jojo.action.non_stand.HamonDeepPassOverdrive;
 import com.github.standobyte.jojo.action.non_stand.HamonDetector;
+import com.github.standobyte.jojo.action.non_stand.HamonGrip;
 import com.github.standobyte.jojo.action.non_stand.HamonHealing;
 import com.github.standobyte.jojo.action.non_stand.HamonHypnosis;
 import com.github.standobyte.jojo.action.non_stand.HamonLifeMagnetism;
@@ -73,7 +74,8 @@ public class ModHamonActions {
                    .shout(ModHamonSkills.CHARACTER_JONATHAN, ModSounds.JONATHAN_SUNLIGHT_YELLOW_OVERDRIVE)
                    .shout(ModHamonSkills.CHARACTER_ZEPPELI, ModSounds.ZEPPELI_SUNLIGHT_YELLOW_OVERDRIVE)
                    .shout(ModHamonSkills.CHARACTER_JOSEPH, ModSounds.JOSEPH_SUNLIGHT_YELLOW_OVERDRIVE)
-                   .shout(ModHamonSkills.CHARACTER_CAESAR, ModSounds.CAESAR_SUNLIGHT_YELLOW_OVERDRIVE)));
+                   .shout(ModHamonSkills.CHARACTER_CAESAR, ModSounds.CAESAR_SUNLIGHT_YELLOW_OVERDRIVE)
+                   .shout(ModHamonSkills.CHARACTER_LISA_LISA, ModSounds.LISA_LISA_SUNLIGHT_YELLOW_OVERDRIVE)));
     
     public static final RegistryObject<HamonAction> HAMON_ZOOM_PUNCH = ACTIONS.register("hamon_zoom_punch", 
             () -> new HamonZoomPunch(new HamonZoomPunch.Builder().energyCost(45F).hitCost(15F).cooldown(14, 30)
@@ -217,4 +219,12 @@ public class ModHamonActions {
     
     public static final RegistryObject<HamonThunderCrossSplitAttack> WARRIOR_THUNDER_CROSS_SPLIT_ATTACK = ACTIONS.register("tcsa", 
             () -> new HamonThunderCrossSplitAttack(new HamonAction.Builder().needsFreeMainHand().needsFreeOffHand().energyCost(200F)));
+    
+    public static final RegistryObject<HamonGrip> WARRIOR_HAMON_GRIP = ACTIONS.register("hamon_grip", 
+            () -> new HamonGrip(new HamonAction.Builder().needsFreeMainHand().needsFreeOffHand().energyCost(100F)
+            		.shout(ModHamonSkills.CHARACTER_JONATHAN, ModSounds.JONATHAN_HAMON_GRIP)
+            		.shout(ModHamonSkills.CHARACTER_ZEPPELI, ModSounds.ZEPPELI_HAMON_GRIP)
+            		.shout(ModHamonSkills.CHARACTER_JOSEPH, ModSounds.JOSEPH_SCREAM_SHOOTING)
+            		.shout(ModHamonSkills.CHARACTER_CAESAR, ModSounds.CAESAR_HAMON_GRIP)
+            		.shout(ModHamonSkills.CHARACTER_LISA_LISA, ModSounds.LISA_LISA_HAMON_GRIP)));
 }

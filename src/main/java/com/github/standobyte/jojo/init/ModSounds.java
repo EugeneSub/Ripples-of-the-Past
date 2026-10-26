@@ -172,11 +172,15 @@ public class ModSounds {
     
     public static final RegistryObject<SoundEvent> JONATHAN_ZOOM_PUNCH = register("jonathan_zoom_punch");
     
+    public static final RegistryObject<SoundEvent> JONATHAN_HAMON_GRIP = register("jonathan_scream");
+    
     public static final RegistryObject<SoundEvent> ZEPPELI_SUNLIGHT_YELLOW_OVERDRIVE = SOUNDS.register("zeppeli_sunlight_yellow_overdrive", 
             () -> new MultiSoundEvent(new ResourceLocation(JojoMod.MOD_ID, "zeppeli_sunlight_yellow_overdrive"), new ResourceLocation(JojoMod.MOD_ID, "zeppeli_hamon_of_the_sun"), 
                     new ResourceLocation(JojoMod.MOD_ID, "zeppeli_this_is_sendo"), new ResourceLocation(JojoMod.MOD_ID, "zeppeli_this_is_sendo_power")));
     
     public static final RegistryObject<SoundEvent> ZEPPELI_ZOOM_PUNCH = register("zeppeli_zoom_punch");
+    
+    public static final RegistryObject<SoundEvent> ZEPPELI_HAMON_GRIP = register("zeppeli_scream");
     
     public static final RegistryObject<SoundEvent> ZEPPELI_LIFE_MAGNETISM_OVERDRIVE = register("zeppeli_life_magnetism_overdrive");
     
@@ -243,6 +247,8 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> CAESAR_BUBBLE_CUTTER = SOUNDS.register("caesar_bubble_cutter", 
             () -> new MultiSoundEvent(new ResourceLocation(JojoMod.MOD_ID, "caesar_bubble_cutter"), new ResourceLocation(JojoMod.MOD_ID, "caesar_disc_shaped_hamon_cutter")));
     
+    public static final RegistryObject<SoundEvent> CAESAR_HAMON_GRIP = register("caesar_scream");
+    
     public static final RegistryObject<SoundEvent> CAESAR_BUBBLE_CUTTER_GLIDING = register("caesar_bubble_cutter_gliding");
     
     public static final RegistryObject<SoundEvent> CAESAR_LAST_HAMON = register("caesar_last_hamon");
@@ -254,6 +260,10 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> LISA_LISA_SUPER_AJA = register("lisa_lisa_super_aja");
     
     public static final RegistryObject<SoundEvent> LISA_LISA_SNAKE_MUFFLER = register("lisa_lisa_snake_muffler");
+    
+    public static final RegistryObject<SoundEvent> LISA_LISA_HAMON_GRIP = register("lisa_lisa_scream");
+    
+    public static final RegistryObject<SoundEvent> LISA_LISA_SUNLIGHT_YELLOW_OVERDRIVE = register("lisa_lisa_sunlight_yellow_overdrive");
 
 
     public static final RegistryObject<SoundEvent> STAND_SUMMON_DEFAULT = register("stand_summon_default");

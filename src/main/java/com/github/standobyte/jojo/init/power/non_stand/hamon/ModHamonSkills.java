@@ -390,8 +390,15 @@ public class ModHamonSkills {
             .requiredSkill(HYPNOSIS)
             .build());
     
+    public static final RegistryObject<CharacterTechniqueHamonSkill> HAMON_GRIP = HAMON_SKILLS.register("hamon_grip",
+            () -> new CharacterTechniqueHamonSkill.Builder(RewardType.ATTACK)
+            .unlocks(ModHamonActions.WARRIOR_HAMON_GRIP)
+            .requiredSkill(SUNLIGHT_YELLOW_OVERDRIVE).requiredSkill(HAMON_SPREAD)
+            .build());
+    
     public static final RegistryObject<CharacterHamonTechnique> CHARACTER_UNKNOWN = HAMON_CHARACTER_TECHNIQUES.register("warrior", 
             () -> new CharacterHamonTechnique.Builder("warrior", Util.make(new ArrayList<>(), list -> {
+            	list.add(ModHamonSkills.HAMON_GRIP);
             	list.add(ModHamonSkills.HAMON_CONFUSION);
             	list.add(ModHamonSkills.THUNDER_CROSS_SPLIT_ATTACK);
             }))

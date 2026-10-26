@@ -1088,6 +1088,8 @@
   "hamonSkill.snake_muffler.desc": "You jump over the target using the scarf, dodging the incoming attack and deal Hamon damage to them (has a cooldown).",
   "hamonSkill.tcsa.name": "Thunder Cross Split Attack",
   "hamonSkill.tcsa.desc": "You perform a slow, reckless but very powerful strike infused with Hamon energy.",
+  "hamonSkill.hamon_grip.name": "Hamon Grip",
+  "hamonSkill.hamon_grip.desc": "You catch a target and infuse a massive amount of Hamon energy. While holding the target you can throw him behind your back",
   
   "jojo.chat.joseph.next_line.1": "Your next line is \"%s\"",
   "jojo.chat.joseph.next_line.2": "Next, you'll say \"%s\"",
@@ -1134,6 +1136,7 @@
   "action.jojo.caesar_crimson_bubble": "Crimson Bubble",
   "action.jojo.lisalisa_snake_muffler": "Snake Muffler",
   "action.jojo.tcsa": "Thunder Cross Split Attack",
+  "action.jojo.hamon_grip": "Hamon Grip",
   
   "non_stand.jojo.vampirism": "Vampirism",
   "action.jojo.vampirism_claw_lacerate": "Claw Lacerate",

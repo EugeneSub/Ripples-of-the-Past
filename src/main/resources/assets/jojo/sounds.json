@@ -360,6 +360,10 @@
     "subtitle": "jojo.subtitle.zoom_punch",
     "sounds": [ "jojo:hamon_user/jonathan_zoom_punch" ]
   },
+  "jonathan_scream": {
+    "subtitle": "jojo.subtitle.joseph_scream",
+    "sounds": [ "jojo:hamon_user/jonathan_scream", "jojo:hamon_user/jonathan_scream2", "jojo:hamon_user/jonathan_scream3" ]
+  },
   "zeppeli_sunlight_yellow_overdrive": {
     "subtitle": "jojo.subtitle.sunlight_yellow_overdrive",
     "sounds": [ "jojo:hamon_user/zeppeli_sunlight_yellow_overdrive" ]
@@ -383,6 +387,10 @@
   "zeppeli_life_magnetism_overdrive": {
     "subtitle": "jojo.subtitle.life_magnetism_overdrive",
     "sounds": [ "jojo:hamon_user/zeppeli_life_magnetism_overdrive" ]
+  },
+  "zeppeli_scream": {
+    "subtitle": "jojo.subtitle.joseph_scream",
+    "sounds": [ "jojo:hamon_user/zeppeli_scream" ]
   },
   "joseph_hamon_punch": {
     "subtitle": "jojo.subtitle.hamon_punch",
@@ -415,6 +423,10 @@
   "caesar_hamon_of_the_sun": {
     "subtitle": "jojo.subtitle.hamon_of_the_sun",
     "sounds": [ "jojo:hamon_user/caesar_hamon_of_the_sun" ]
+  },
+  "caesar_scream": {
+    "subtitle": "jojo.subtitle.joseph_scream",
+    "sounds": [ "jojo:hamon_user/caesar_scream", "jojo:hamon_user/caesar_scream2" ]
   },
   "jonathan_overdrive_barrage": {
     "subtitle": "jojo.subtitle.overdrive_barrage",
@@ -540,7 +552,15 @@
     "subtitle": "jojo.subtitle.snake_muffler",
     "sounds": [ "jojo:hamon_user/lisa_lisa_snake_muffler" ]
   },
-  
+  "lisa_lisa_scream": {
+    "subtitle": "jojo.subtitle.joseph_scream",
+    "sounds": [ "jojo:hamon_user/lisa_lisa_scream" ]
+  },
+  "lisa_lisa_sunlight_yellow_overdrive": {
+    "subtitle": "jojo.subtitle.sunlight_yellow_overdrive",
+    "sounds": [ "jojo:hamon_user/lisa_lisa_sunlight_yellow_overdrive" ]
+  },
+
   "stand_summon_default": {
     "subtitle": "jojo.subtitle.stand_summon",
     "sounds": [ "jojo:stand/stand_summon" ]

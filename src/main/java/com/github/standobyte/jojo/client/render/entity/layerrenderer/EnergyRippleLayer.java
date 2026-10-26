@@ -87,7 +87,8 @@ public class EnergyRippleLayer<T extends LivingEntity, M extends BipedModel<T>> 
             }
             if (INonStandPower.getNonStandPowerOptional(entity).map(power -> power.getHeldAction(true) == ModHamonActions.HAMON_SUNLIGHT_YELLOW_OVERDRIVE.get()).orElse(false)
             		|| curPlayerAction.map(action -> action.getAction() == ModHamonActions.WARRIOR_THUNDER_CROSS_SPLIT_ATTACK.get()).orElse(false)
-            		|| curPlayerAction.map(action -> action.getAction() == ModHamonActions.JONATHAN_SUNLIGHT_YELLOW_OVERDRIVE_BARRAGE.get()).orElse(false)) {
+            		|| curPlayerAction.map(action -> action.getAction() == ModHamonActions.JONATHAN_SUNLIGHT_YELLOW_OVERDRIVE_BARRAGE.get()).orElse(false)
+            		|| curPlayerAction.map(action -> action.getAction() == ModHamonActions.WARRIOR_HAMON_GRIP.get()).orElse(false)) {
                 particle = ModParticles.HAMON_SPARK_YELLOW.get();
                 particles = MathUtil.fractionRandomInc((handSparkIntensity * 2) * timeDelta);
                 controlLevel = 0.15F;

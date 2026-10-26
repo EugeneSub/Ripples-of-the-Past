@@ -73,7 +73,7 @@ public class HamonSunlightYellowOverdriveBarrage extends HamonAction implements 
     protected void perform(World world, LivingEntity user, INonStandPower power, ActionTarget target) {
         if (user instanceof PlayerEntity) {
             if (!user.level.isClientSide()) {
-                JojoModUtil.sayVoiceLine(user, ModSounds.JONATHAN_SYO_BARRAGE.get(), null, true);
+                //JojoModUtil.sayVoiceLine(user, ModSounds.JONATHAN_SYO_BARRAGE.get(), null, true);
                 setPlayerAction(user, power);
             }
         }

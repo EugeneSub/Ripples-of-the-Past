@@ -45,6 +45,8 @@ public class ModPlayerAnimations {
     public static BasicToggleAnim hamonConfusion;
     public static BasicToggleAnim caesarFinalHamon;
     public static BasicToggleAnim tcsa;
+    public static BasicToggleAnim hamon_grip;
+    public static BasicToggleAnim hamon_grip_throw;
 
     /** 
      * This string must match the full name of the class and the package it's in.<br>
@@ -142,6 +144,14 @@ public class ModPlayerAnimations {
         tcsa = PlayerAnimationHandler.getPlayerAnimator().registerBasicAnimLayer(
                 "com.github.standobyte.jojo.client.playeranim.anim.kosmximpl.hamon.KosmXTCSAHandler",
                 new ResourceLocation(JojoMod.MOD_ID, "tcsa"), 1);
+        
+        hamon_grip = PlayerAnimationHandler.getPlayerAnimator().registerBasicAnimLayer(
+                "com.github.standobyte.jojo.client.playeranim.anim.kosmximpl.hamon.KosmXHamonGripHandler",
+                new ResourceLocation(JojoMod.MOD_ID, "hamon_grip"), 1);
+        
+        hamon_grip_throw = PlayerAnimationHandler.getPlayerAnimator().registerBasicAnimLayer(
+                "com.github.standobyte.jojo.client.playeranim.anim.kosmximpl.hamon.KosmXHamonGripThrowHandler",
+                new ResourceLocation(JojoMod.MOD_ID, "hamon_grip_throw"), 1);
         
         
         

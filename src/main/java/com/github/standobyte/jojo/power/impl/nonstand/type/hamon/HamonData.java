@@ -1444,7 +1444,8 @@ public class HamonData extends TypeSpecificData {
     	Optional<ContinuousActionInstance<?, ?>> curPlayerAction = ContinuousActionInstance.getCurrentAction(user);
         if (power.getHeldAction() == ModHamonActions.HAMON_SUNLIGHT_YELLOW_OVERDRIVE.get()
                 || power.getHeldAction() == ModHamonActions.JONATHAN_SUNLIGHT_YELLOW_OVERDRIVE_BARRAGE.get()
-                || curPlayerAction.map(action -> action.getAction() == ModHamonActions.WARRIOR_THUNDER_CROSS_SPLIT_ATTACK.get()).orElse(false)) {
+                || curPlayerAction.map(action -> action.getAction() == ModHamonActions.WARRIOR_THUNDER_CROSS_SPLIT_ATTACK.get()).orElse(false)
+                || curPlayerAction.map(action -> action.getAction() == ModHamonActions.WARRIOR_HAMON_GRIP.get()).orElse(false)) {
             return HamonAuraColor.YELLOW;
         }
         if (ContinuousActionInstance.getCurrentAction(user)
